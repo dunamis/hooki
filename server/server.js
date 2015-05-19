@@ -37,27 +37,29 @@ var WebServer = {
             res.end();
         });
 
-        // page 요청 라우팅
         app.get('/start', function(req, res) {
-            res.render('view/start', {
+            res.render('views/start/firstPage', {
                 title : 'Start page'
             });
         });
 
         app.get('/start/:subPageName', function(req, res) {
             var subPageName = req.params.subPageName;
-            res.end('start page - ' + subPageName);
+            res.render('views/start/' + subPageName, {
+                title : 'Start page',
+                subPageName : subPageName
+            });
         });
 
         app.get('/write', function(req, res) {
-            res.render('view/write', {
+            res.render('views/write', {
                 title : 'Write page'
             });
         });
 
         app.get('/view/:pageId', function(req, res) {
             var pageId = req.params.pageId;
-            res.render('view/view', {
+            res.render('views/view', {
                 title : 'View page',
                 pageId : pageId
             });
@@ -65,7 +67,7 @@ var WebServer = {
 
         app.get('/profile/:userId', function(req, res) {
             var userId = req.params.userId;
-            res.render('view/profile', {
+            res.render('views/profile', {
                 title : 'Profile page',
                 userId : userId
             });
@@ -73,7 +75,7 @@ var WebServer = {
 
         app.get('/product/:productId', function(req, res) {
             var productId = req.params.productId;
-            res.render('view/product', {
+            res.render('views/product', {
                 title : 'Proudct page',
                 productId : productId
             });

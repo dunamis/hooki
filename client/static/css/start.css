@@ -1,0 +1,9 @@
+ul.tab-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.tab-list li {
+    display: inline;
+}
