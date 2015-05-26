@@ -11,7 +11,9 @@
             <% include ../../partial/start/nav %>
         </div>
         <div class='content'>
-            review
+            <% reviews.forEach(function(review) { %>
+                <li><%= review.title %> - <%= review.score %> - <%= review.date %> - <%= review.tag %> - <%= review.content %></li>
+            <% }); %>
         </div>
         <div class='footer-wrap'>
             <% include ../../partial/start/footer %>

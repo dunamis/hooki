@@ -6,6 +6,7 @@ var process = require('process');
 var fs = require('fs');
 var path = require('path');
 var PORT = process.env['port'] || "";
+var curDB;
 
 // 웹서버 객체
 var WebServer = {
@@ -18,12 +19,19 @@ var WebServer = {
         app.set('views', path.join(__dirname, '/../client/template'));
 
         // mongodb 초기화
-        /*MongoClient.connect("mongodb://localhost:27027/hooki", function(err, db) {
-        if (err)
-        throw err;
-        else
-        _this.mongoDb = db;
-        });*/
+        MongoClient.connect('mongodb://localhost:27017/hooki', function(err, db) {
+            if (err) throw err;
+
+            curDB = db;
+	        // insert dummy data
+	        var collection = curDB.collection('review');
+	        collection.remove(null, {safe : true}, function(err, result) {
+		        if (err) throw err;
+		        for (var i = 0; i<20; i++) {
+			        collection.insert({title:'title', score:i, date: new Date(), tag: 'tag'+i, content:'Content'+i});
+			    }
+		    });
+		});
 
         // body parser middleware 사용
         app.use(bodyParser.json());
@@ -42,13 +50,21 @@ var WebServer = {
                 title : 'Start page'
             });
         });
-
         app.get('/start/:subPageName', function(req, res) {
             var subPageName = req.params.subPageName;
-            res.render('views/start/' + subPageName, {
-                title : 'Start page',
-                subPageName : subPageName
-            });
+            if (subPageName == 'review') {
+                curDB.collection('review').find().limit(10).toArray(function(err, items) {
+                    console.log(items.length);
+                    res.render('views/start/review', {
+                        reviews : items
+                    });
+                });
+            } else {
+	            res.render('views/start/' + subPageName, {
+	                title : 'Start page',
+	                subPageName : subPageName
+	            });
+            }
         });
 
         app.get('/write', function(req, res) {
