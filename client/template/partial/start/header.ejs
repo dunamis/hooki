@@ -1,3 +1,34 @@
-<i class='glyphicon glyphicon-search'></i>
-<input name='serch-keyword'>
-</input>
+<div class='top-bar'>
+    <div class='logo'>
+        후기
+    </div>
+    <ul class='tab-list'>
+        <%
+            subMenuSelected = [];
+            subMenuSelected[subPageName] = 'selected';
+        %>
+        <li class='<%=subMenuSelected['review'] || ""%>'>
+            <a href='/start/review'>후기</a>
+        </li>
+        <li class='<%=subMenuSelected['tags'] || ""%>'>
+            <a href='/start/tags'>태그</a>
+        </li>
+        <li class='<%=subMenuSelected['users'] || ""%>'>
+            <a href='/start/users'>사용자</a>
+        </li>
+        <li class='<%=subMenuSelected['request'] || ""%>'>
+            <a href='/start/request'>리뷰 요청</a>
+        </li>
+        <li class='<%=subMenuSelected['product'] || ""%>'>
+            <a href='/start/product'>제품</a>
+        </li>
+    </ul>
+    <div class='menu-set'>
+        <div class='search-block'>
+            <i class='glyphicon glyphicon-search'></i>
+            <input type="search" class="form-control" placeholder="후기 검색" name='serch-keyword'>
+            </input>
+        </div>
+        <a class='login-button'> 로그인 </a>
+    </div>
+</div>

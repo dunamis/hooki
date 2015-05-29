@@ -20,18 +20,28 @@ var WebServer = {
 
         // mongodb 초기화
         MongoClient.connect('mongodb://localhost:27017/hooki', function(err, db) {
-            if (err) throw err;
+            if (err)
+                throw err;
 
             curDB = db;
-	        // insert dummy data
-	        var collection = curDB.collection('review');
-	        collection.remove(null, {safe : true}, function(err, result) {
-		        if (err) throw err;
-		        for (var i = 0; i<20; i++) {
-			        collection.insert({title:'title', score:i, date: new Date(), tag: 'tag'+i, content:'Content'+i});
-			    }
-		    });
-		});
+            // insert dummy data
+            var collection = curDB.collection('review');
+            collection.remove(null, {
+                safe : true
+            }, function(err, result) {
+                if (err)
+                    throw err;
+                for (var i = 0; i < 20; i++) {
+                    collection.insert({
+                        title : 'title',
+                        score : i,
+                        date : new Date(),
+                        tag : 'tag' + i,
+                        content : 'Content' + i
+                    });
+                }
+            });
+        });
 
         // body parser middleware 사용
         app.use(bodyParser.json());
@@ -41,30 +51,26 @@ var WebServer = {
 
         // page 요청 라우팅
         app.get('/', function(req, res) {
-            res.redirect('/start');
+            res.redirect('/start/review');
             res.end();
         });
 
-        app.get('/start', function(req, res) {
-            res.render('views/start/firstPage', {
-                title : 'Start page'
+        app.get('/start/review', function(req, res) {
+            curDB.collection('review').find().limit(10).toArray(function(err, items) {
+                console.log(items.length);
+                res.render('views/start/review', {
+                    reviews : items,
+                    subPageName : 'review'
+                });
             });
         });
+
         app.get('/start/:subPageName', function(req, res) {
             var subPageName = req.params.subPageName;
-            if (subPageName == 'review') {
-                curDB.collection('review').find().limit(10).toArray(function(err, items) {
-                    console.log(items.length);
-                    res.render('views/start/review', {
-                        reviews : items
-                    });
-                });
-            } else {
-	            res.render('views/start/' + subPageName, {
-	                title : 'Start page',
-	                subPageName : subPageName
-	            });
-            }
+            res.render('views/start/' + subPageName, {
+                title : 'Start page',
+                subPageName : subPageName
+            });
         });
 
         app.get('/write', function(req, res) {

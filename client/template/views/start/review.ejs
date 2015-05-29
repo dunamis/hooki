@@ -2,18 +2,25 @@
 <html>
     <head>
         <% include ../../partial/common/head %>
+        <link rel='stylesheet' type='text/css' href='/static/css/review.css'>
     </head>
     <body>
         <div class='header-wrap'>
             <% include ../../partial/start/header %>
         </div>
-        <div class='nav-wrap'>
-            <% include ../../partial/start/nav %>
-        </div>
         <div class='content'>
-            <% reviews.forEach(function(review) { %>
-                <li><%= review.title %> - <%= review.score %> - <%= review.date %> - <%= review.tag %> - <%= review.content %></li>
-            <% }); %>
+            <ul class='review-list'>
+                <% reviews.forEach(function(review) { %>
+                <li>
+                    <span class='thumb'><img src='/static/img/no_image_available.png'></span>
+                    <span class='tag'><%= review.tag %></span>
+                    <span class='title'><%= review.title %></span>
+                    <span class='nick'></span>
+                    <span class='score'><%= review.score %></span>
+                    <span class='etc' style='display:none'><%= review.date %><%= review.content %></span>
+                </li>
+                <% }); %>
+            </ul>
         </div>
         <div class='footer-wrap'>
             <% include ../../partial/start/footer %>
