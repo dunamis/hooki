@@ -108,6 +108,14 @@ var WebServer = {
             }
         });
 
+        app.get('/profile/:userId', function(req, res) {
+            var userId = req.params.userId;
+            res.render('views/profile', {
+                title : 'Profile page',
+                userId : userId
+            });
+        });
+
         app.get('/view/:pageId', function(req, res) {
             var pageId = req.params.pageId;
             res.render('views/view', {
