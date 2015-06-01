@@ -1,0 +1,7 @@
+#preview{
+    width:520px;
+    height:520px;
+    overflow:auto;
+    background-color:rgba(221,214,221,0.3);
+    border:1px dashed black;
+}
