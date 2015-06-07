@@ -50,6 +50,9 @@ var WebServer = {
 
         // body parser middleware 사용
         app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({
+            extended: true
+	}));
 
         // static 파일 요청 처리
         app.use('/static', express.static(path.join(__dirname, '/../client/static/')));
@@ -131,6 +134,13 @@ var WebServer = {
                 productId : productId
             });
         });
+
+	app.post('/login', function(req, res) {
+	    console.log('post /login');
+	    console.log(req.body);
+
+	    res.redirect('/');
+	});
 
         this.server = app.listen(PORT);
     }
