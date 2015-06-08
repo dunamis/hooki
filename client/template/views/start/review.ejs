@@ -13,8 +13,8 @@
                 <% reviews.forEach(function(review) { %>
                 <li>
                     <span class='thumb'><img src='/static/img/no_image_available.png'></span>
+                    <span class='title'><a href='/view/<%=review.pageId%>'><%= review.title %></a></span>
                     <span class='tag'><%= review.tag %></span>
-                    <span class='title'><%= review.title %></span>
                     <span class='nick'></span>
                     <span class='score'><%= review.score %></span>
                     <span class='etc' style='display:none'><%= review.date %><%= review.content %></span>

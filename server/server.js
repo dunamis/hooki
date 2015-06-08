@@ -8,7 +8,7 @@ var fs = require('fs');
 var path = require('path');
 var PORT = process.env['port'] || "";
 var curDB;
-var multer  = require('multer');
+var multer = require('multer');
 var Grid = require('gridfs-stream');
 var gfs;
 
@@ -38,6 +38,7 @@ var WebServer = {
                     throw err;
                 for (var i = 0; i < 20; i++) {
                     collection.insert({
+                        pageId : 'id' + i,
                         title : 'title',
                         score : i,
                         date : new Date(),
@@ -51,8 +52,8 @@ var WebServer = {
         // body parser middleware 사용
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({
-            extended: true
-	}));
+            extended : true
+        }));
 
         // static 파일 요청 처리
         app.use('/static', express.static(path.join(__dirname, '/../client/static/')));
@@ -88,24 +89,25 @@ var WebServer = {
         });
 
         app.use(multer({
-            upload: null,
-            onFileUploadStart: function (file) {
-                console.log('[onFileUploadStart]'+file.originalname + ' is starting ...');
+            upload : null,
+            onFileUploadStart : function(file) {
+                console.log('[onFileUploadStart]' + file.originalname + ' is starting ...');
                 this.upload = gfs.createWriteStream({
-                    filename: file.originalname
+                    filename : file.originalname
                 });
-            }, onFildUploadData: function (files, data) {
+            },
+            onFildUploadData : function(files, data) {
                 this.upload.write(data);
             },
-            onFileUploadComplete: function (file) {
-                console.log('[onFileUploadComplete]'+file.fieldname + ' uploaded to  ' + file.path);
+            onFileUploadComplete : function(file) {
+                console.log('[onFileUploadComplete]' + file.fieldname + ' uploaded to  ' + file.path);
                 this.upload.end();
-                done=true;
+                done = true;
             }
         }));
 
-        app.post('/api/photo',function(req,res) {
-            if(done==true){
+        app.post('/api/photo', function(req, res) {
+            if (done == true) {
                 console.log(req.files);
                 res.end("File uploaded.");
             }
@@ -135,12 +137,12 @@ var WebServer = {
             });
         });
 
-	app.post('/login', function(req, res) {
-	    console.log('post /login');
-	    console.log(req.body);
+        app.post('/login', function(req, res) {
+            console.log('post /login');
+            console.log(req.body);
 
-	    res.redirect('/');
-	});
+            res.redirect('/');
+        });
 
         this.server = app.listen(PORT);
     }

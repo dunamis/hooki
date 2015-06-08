@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="static/css/write.css">
-		<%=title%><br>
+        <% include ../partial/common/head %>
+        <link rel='stylesheet' type='text/css' href='/static/css/write.css'>
     </head>
     <body>
+        <div class='header-wrap'>
+            <% include ../partial/other/header %>
+        </div>
         <form id =  "uploadForm"
          enctype =  "multipart/form-data"
          action  =  "/api/photo"
@@ -35,5 +38,8 @@
             document.getElementById("preview").appendChild(img);
         }
 	    </script>
+        <div class='footer-wrap'>
+            <% include ../partial/other/footer %>
+        </div>
     </body>
 </html>

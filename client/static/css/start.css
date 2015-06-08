@@ -58,13 +58,22 @@ div.top-bar .search-block input {
     border-radius: 999em;
 }
 
-div.top-bar .login-button {
+div.top-bar .round-btn {
     display: inline-block;
     margin-right: 8px;
     height: 38px;
-    width: 100px;
     text-align: center;
     line-height: 38px;
     border-radius: 999em;
     border: 1px solid #EEE
+}
+
+div.top-bar .login-btn {
+    margin-right: 8px;
+    width: 100px;
+}
+
+div.top-bar .write-btn {
+    margin-right: 8px;
+    width: 100px;
 }

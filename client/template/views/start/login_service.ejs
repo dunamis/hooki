@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <% include ../../partial/common/head %>
+        <link rel='stylesheet' type='text/css' href='/static/css/write.css'>
     </head>
-
     <body>
+        <div class='header-wrap'>
+            <% include ../../partial/other/header %>
+        </div>
         <h1>login</h1>
 
         <form method="post" action="/login">
@@ -13,7 +17,7 @@
             </div>
             <div>
                 <label>Password:</label>
-	        <input type="password" name="password" />
+                <input type="password" name="password" />
             </div>
             <div>
                 <input type="submit" value="login" />
