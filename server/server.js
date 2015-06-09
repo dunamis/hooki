@@ -29,24 +29,6 @@ var WebServer = {
 
             curDB = db;
             gfs = new Grid(db, mongo);
-            // insert dummy data
-            var collection = curDB.collection('review');
-            collection.remove(null, {
-                safe : true
-            }, function(err, result) {
-                if (err)
-                    throw err;
-                for (var i = 0; i < 20; i++) {
-                    collection.insert({
-                        pageId : 'id' + i,
-                        title : 'title',
-                        score : i,
-                        date : new Date(),
-                        tag : 'tag' + i,
-                        content : 'Content' + i
-                    });
-                }
-            });
         });
 
         // body parser middleware 사용
@@ -142,6 +124,19 @@ var WebServer = {
             console.log(req.body);
 
             res.redirect('/');
+        });
+
+        app.post('/autoComplete', function(req, res) {
+            var c = req.body.c;
+            console.log(req.body);
+            console.log('[autoComplete 요청]', c);
+            curDB.collection('review').find({
+                'title' : {
+                    $regex : '.*' + c + '.*'
+                }
+            }).limit(10).toArray(function(err, items) {
+                res.send(items);
+            });
         });
 
         this.server = app.listen(PORT);

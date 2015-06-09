@@ -58,6 +58,16 @@ div.top-bar .search-block input {
     border-radius: 999em;
 }
 
+div.top-bar .search-block .search-result {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    width: 300px;
+    top: 50px;
+    z-index: 999;
+    display:none;
+}
+
 div.top-bar .round-btn {
     display: inline-block;
     margin-right: 8px;
@@ -65,7 +75,8 @@ div.top-bar .round-btn {
     text-align: center;
     line-height: 38px;
     border-radius: 999em;
-    border: 1px solid #EEE
+    border: 1px solid #EEE;
+    vertical-align: top;
 }
 
 div.top-bar .login-btn {

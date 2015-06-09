@@ -4,8 +4,8 @@
     </div>
     <ul class='tab-list'>
         <%
-            subMenuSelected = [];
-            subMenuSelected[subPageName] = 'selected';
+        subMenuSelected = [];
+        subMenuSelected[subPageName] = 'selected';
         %>
         <li class='<%=subMenuSelected['review'] || ""%>'>
             <a href='/start/review'>후기</a>
@@ -26,8 +26,9 @@
     <div class='menu-set'>
         <div class='search-block'>
             <i class='glyphicon glyphicon-search'></i>
-            <input type="search" class="form-control" placeholder="후기 검색" name='serch-keyword'>
+            <input type="search" class="form-control" placeholder="후기 검색" name='search-keyword'>
             </input>
+            <div class='search-result'>aa</div>
         </div>
         <a class="round-btn write-btn" href="/write"> 후기 작성 </a>
         <a class="round-btn login-btn" href="/start/login_service"> 로그인 </a>
