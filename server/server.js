@@ -128,7 +128,6 @@ var WebServer = {
 
         app.post('/autoComplete', function(req, res) {
             var c = req.body.c;
-            console.log(req.body);
             console.log('[autoComplete 요청]', c);
             curDB.collection('review').find({
                 'title' : {
