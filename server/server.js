@@ -1,12 +1,11 @@
-var mongo = require('mongodb');
-var MongoClient = mongo.MongoClient;
+var HookiProvider = require("./hookiprovider").HookiProvider;
 var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
 var process = require('process');
 var fs = require('fs');
 var path = require('path');
-var PORT = process.env['port'] || "";
+var PORT = 8888;//process.env['port'] || "";
 var curDB;
 var multer = require('multer');
 var Grid = require('gridfs-stream');
@@ -22,14 +21,8 @@ var WebServer = {
         app.set('view engine', 'ejs');
         app.set('views', path.join(__dirname, '/../client/template'));
 
-        // mongodb 초기화
-        MongoClient.connect('mongodb://localhost:27017/hooki', function(err, db) {
-            if (err)
-                throw err;
-
-            curDB = db;
-            gfs = new Grid(db, mongo);
-        });
+        // mongodb 초기화 및 후기 객체 생성
+        var hookiProvider = new HookiProvider('localhost', 27017);
 
         // body parser middleware 사용
         app.use(bodyParser.json());
@@ -47,7 +40,7 @@ var WebServer = {
         });
 
         app.get('/start/review', function(req, res) {
-            curDB.collection('review').find().limit(10).toArray(function(err, items) {
+            hookiProvider.findAll(10, function(err, items) {
                 console.log(items.length);
                 res.render('views/start/review', {
                     reviews : items,
@@ -129,11 +122,12 @@ var WebServer = {
         app.post('/autoComplete', function(req, res) {
             var c = req.body.c;
             console.log('[autoComplete 요청]', c);
-            curDB.collection('review').find({
+            var condition = {
                 'title' : {
                     $regex : '.*' + c + '.*'
                 }
-            }).limit(10).toArray(function(err, items) {
+            };
+            hookiProvider.findByCondition(condition, function(err, items) {
                 res.send(items);
             });
         });

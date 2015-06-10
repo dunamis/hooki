@@ -11558,7 +11558,7 @@ MongoClient.connect('mongodb://localhost:27017/hooki', function(err, db) {
     }
 
     // insert dummy data
-    var collection = db.collection('review');
+    var collection = db.collection('hooki');
 
     collection.remove(null, {
         safe : true
