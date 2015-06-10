@@ -5,11 +5,19 @@ var app = express();
 var process = require('process');
 var fs = require('fs');
 var path = require('path');
-var PORT = process.env['port'] || "";
 var curDB;
 var multer = require('multer');
 var Grid = require('gridfs-stream');
 var gfs;
+
+// 개발을 위한 포트 및 DB 이름
+var WEBSERVER_PORT_LIST = {
+	'sang' : 11111,
+	'ciogenis' : 22222,
+	'soopdop' : 33333
+};
+var WEBSERVER_PORT = process.env['port'] || WEBSERVER_PORT_LIST[process.env['USER']];
+var DB_NAME = process.env['USER'] + '_hooki';
 
 // 웹서버 객체
 var WebServer = {
@@ -22,7 +30,7 @@ var WebServer = {
         app.set('views', path.join(__dirname, '/../client/template'));
 
         // mongodb 초기화 및 후기 객체 생성
-        var hookiProvider = new HookiProvider('localhost', 27017);
+        var hookiProvider = new HookiProvider('localhost', 27017, DB_NAME);
 
         // body parser middleware 사용
         app.use(bodyParser.json());
@@ -35,34 +43,34 @@ var WebServer = {
 
         // page 요청 라우팅
         app.get('/', function(req, res) {
-            res.redirect('/start/review');
+            res.redirect('/review');
             res.end();
         });
 
-        app.get('/start/review', function(req, res) {
+        app.get('/review', function(req, res) {
             hookiProvider.findAll(10, function(err, items) {
                 console.log(items.length);
-                res.render('views/start/review', {
+                res.render('views/review', {
                     reviews : items,
                     subPageName : 'review'
                 });
             });
         });
 
-        app.get('/start/:subPageName', function(req, res) {
+        app.get('/:subPageName', function(req, res) {
             var subPageName = req.params.subPageName;
-            res.render('views/start/' + subPageName, {
+            res.render('views/' + subPageName, {
                 title : 'Start page',
                 subPageName : subPageName
             });
         });
-
+/*
         app.get('/write', function(req, res) {
             res.render('views/write', {
                 title : 'Write page'
             });
         });
-
+*/
         app.use(multer({
             upload : null,
             onFileUploadStart : function(file) {
@@ -132,7 +140,8 @@ var WebServer = {
             });
         });
 
-        this.server = app.listen(PORT);
+        this.server = app.listen(WEBSERVER_PORT);
+        console.log('web server is started, http://104.238.148.30:'+ WEBSERVER_PORT);
     }
 };
 

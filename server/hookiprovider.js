@@ -4,10 +4,11 @@ var BSON = mongo.BSON;
 var ObjectID = mongo.ObjectID;
 var curDB;
 
-HookiProvider = function(){
-    console.log("HookiProvider initialized. Connecting to MongoDB...");
+HookiProvider = function(host, port, dbName) {
+    var url = 'mongodb://' + host + ':' + port + '/' + dbName;
+    console.log("HookiProvider initialized. Connecting to MongoDB... " + url);
     // mongodb 초기화
-    MongoClient.connect('mongodb://localhost:27017/hooki', function(error, db) {
+    MongoClient.connect(url, function(error, db) {
         if (error)
             throw error;
         else {
@@ -22,7 +23,7 @@ HookiProvider.prototype.getCollection = function(callback) {
         if (error)
             callback(error);
         else {
-            console.log("hooki COLLECTION: "+hookiCollection);
+            console.log("hooki COLLECTION: " + hookiCollection);
             callback(null, hookiCollection);
         }
     });
@@ -34,7 +35,7 @@ HookiProvider.prototype.findAll = function(limits, callback) {
             callback(error);
         else {
             if (limits == -1) {
-                hookiCollection.find().toArray(function(error,items) {
+                hookiCollection.find().toArray(function(error, items) {
                     if (error)
                         callback(error);
                     else
@@ -55,18 +56,17 @@ HookiProvider.prototype.findAll = function(limits, callback) {
 HookiProvider.prototype.findById = function(hookiId, callback) {
     console.log("[HookiProvider:findById] function called");
     this.getCollection(function(error, hookiCollection) {
-        if(error)
+        if (error)
             callback(error);
         else {
-            hookiCollection.findOne(
-                {_id: ObjectID(hookiId)},
-                function(error, result) {
-                    if(error)
-                        callback(error);
-                    else
-                        callback(null, result);
-                }
-            );
+            hookiCollection.findOne({
+                _id : ObjectID(hookiId)
+            }, function(error, result) {
+                if (error)
+                    callback(error);
+                else
+                    callback(null, result);
+            });
         }
     });
 };
@@ -74,7 +74,7 @@ HookiProvider.prototype.findById = function(hookiId, callback) {
 HookiProvider.prototype.findByCondition = function(condition, callback) {
     console.log("[HookiProvider:findByCondition] function called");
     this.getCollection(function(error, hookiCollection) {
-        if(error)
+        if (error)
             callback(error);
         else {
             hookiCollection.find({
@@ -94,7 +94,7 @@ HookiProvider.prototype.save = function(title, score, tag, content, pageId, call
         if (error)
             callback(error);
         else {
-            var hookiData ={};
+            var hookiData = {};
             hookiData.title = title;
             hookiData.score = score;
             hookiData.createdDate = new Date();
@@ -114,16 +114,18 @@ HookiProvider.prototype.addCommentToHooki = function(hookiId, comment, callback)
         if (error)
             callback(error);
         else {
-            hookiCollection.update(
-                {_id:ObjectID(hookiId)},
-                {"$push": {comments: comment}},
-                function(error, hooki) {
-                    if (error)
-                        callback(error);
-                    else
-                        callback(null, hooki);
+            hookiCollection.update({
+                _id : ObjectID(hookiId)
+            }, {
+                "$push" : {
+                    comments : comment
                 }
-            );
+            }, function(error, hooki) {
+                if (error)
+                    callback(error);
+                else
+                    callback(null, hooki);
+            });
         }
     });
 };
