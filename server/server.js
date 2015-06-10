@@ -5,7 +5,7 @@ var app = express();
 var process = require('process');
 var fs = require('fs');
 var path = require('path');
-var PORT = 8888;//process.env['port'] || "";
+var PORT = process.env['port'] || "";
 var curDB;
 var multer = require('multer');
 var Grid = require('gridfs-stream');
