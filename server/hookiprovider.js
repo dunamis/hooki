@@ -77,12 +77,8 @@ HookiProvider.prototype.findByCondition = function(condition, callback) {
         if (error)
             callback(error);
         else {
-            hookiCollection.find({
-                'title' : {
-                    $regex : '.*' + c + '.*'
-                }
-            }).limit(10).toArray(function(error, items) {
-                res.send(items);
+            hookiCollection.find(condition).limit(10).toArray(function(error, items) {
+                callback(error, items);
             });
         }
     });
