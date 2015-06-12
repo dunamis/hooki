@@ -43,17 +43,26 @@ var WebServer = {
 
         // page 요청 라우팅
         app.get('/', function(req, res) {
-            res.redirect('/review');
+            res.redirect('/review?login=0');
             res.end();
         });
 
         app.get('/review', function(req, res) {
             hookiProvider.findAll(10, function(err, items) {
+                var loginStatus = req.param('login');
                 console.log(items.length);
                 res.render('views/review', {
                     reviews : items,
-                    subPageName : 'review'
+                    subPageName : 'review',
+                    login : loginStatus
                 });
+            });
+        });
+
+        app.get('/login_service', function(req, res) {
+            res.render('views/login_service', {
+                subPageName : "login",
+                login : '-1'
             });
         });
 
@@ -61,7 +70,7 @@ var WebServer = {
             var subPageName = req.params.subPageName;
             res.render('views/' + subPageName, {
                 title : 'Start page',
-                subPageName : subPageName
+                subPageName : subPageName,
             });
         });
 /*
@@ -121,10 +130,23 @@ var WebServer = {
         });
 
         app.post('/login', function(req, res) {
-            console.log('post /login');
-            console.log(req.body);
+            var login = false;
+            var username = req.body.username;
+            var password = req.body.password;
 
-            res.redirect('/');
+            if (username === 'ciogenis@gmail.com' && password === '1234') {
+                login = true;
+            }
+
+            if (login === true) {
+                res.redirect('/review?login=1');
+            }
+            else {
+                res.render('views/login_service', {
+                    subPageName : 'login',
+                    login: '0'  // login failed
+                });
+            }
         });
 
         app.post('/autoComplete', function(req, res) {

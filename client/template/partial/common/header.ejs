@@ -31,6 +31,10 @@
             <div class='search-result'>aa</div>
         </div>
         <a class="round-btn write-btn" href="/write"> 후기 작성 </a>
-        <a class="round-btn login-btn" href="/login_service"> 로그인 </a>
+        <%if (login == '1') { %>
+            <a class="round-btn login-btn" href="/review?login=0"> 로그아웃 </a>
+        <%} else { %>
+            <a class="round-btn login-btn" href="/login_service"> 로그인 </a>
+        <%} %>
     </div>
 </div>
