@@ -12,9 +12,9 @@ var gfs;
 
 // 개발을 위한 포트 및 DB 이름
 var WEBSERVER_PORT_LIST = {
-	'sang' : 11111,
-	'ciogenis' : 22222,
-	'soopdop' : 33333
+    'sang' : 11111,
+    'ciogenis' : 22222,
+    'soopdop' : 33333
 };
 var WEBSERVER_PORT = process.env['port'] || WEBSERVER_PORT_LIST[process.env['USER']];
 var DB_NAME = process.env['USER'] + '_hooki';
@@ -41,6 +41,18 @@ var WebServer = {
         // static 파일 요청 처리
         app.use('/static', express.static(path.join(__dirname, '/../client/static/')));
 
+        // favicon 처리
+        app.get('/favicon.ico', function(req, res) {
+            res.sendFile(path.join(__dirname, '../client/static/img/favicon.ico'), {
+                headers : {
+                    "Content-Type" : "image/x-icon"
+                }
+            }, function(err) {
+                if (err)
+                    throw err;
+            });
+        });
+
         // page 요청 라우팅
         app.get('/', function(req, res) {
             res.redirect('/review?login=0');
@@ -66,20 +78,22 @@ var WebServer = {
             });
         });
 
+        //임시로 사용중이 인 것임.
         app.get('/:subPageName', function(req, res) {
             var subPageName = req.params.subPageName;
+            console.log('call page:' + subPageName);
             res.render('views/' + subPageName, {
                 title : 'Start page',
                 subPageName : subPageName,
             });
         });
-/*
-        app.get('/write', function(req, res) {
-            res.render('views/write', {
-                title : 'Write page'
-            });
-        });
-*/
+        /*
+         app.get('/write', function(req, res) {
+         res.render('views/write', {
+         title : 'Write page'
+         });
+         });
+         */
         app.use(multer({
             upload : null,
             onFileUploadStart : function(file) {
@@ -140,11 +154,10 @@ var WebServer = {
 
             if (login === true) {
                 res.redirect('/review?login=1');
-            }
-            else {
+            } else {
                 res.render('views/login_service', {
                     subPageName : 'login',
-                    login: '0'  // login failed
+                    login : '0' // login failed
                 });
             }
         });
@@ -158,12 +171,13 @@ var WebServer = {
                 }
             };
             hookiProvider.findByCondition(condition, function(err, items) {
+                console.log(items);
                 res.send(items);
             });
         });
 
         this.server = app.listen(WEBSERVER_PORT);
-        console.log('web server is started, http://104.238.148.30:'+ WEBSERVER_PORT);
+        console.log('web server is started, http://104.238.148.30:' + WEBSERVER_PORT);
     }
 };
 

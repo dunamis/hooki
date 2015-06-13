@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('input[name=search-keyword]').keyup(function() {
         var c = $(this).val();
 
-        if(c === '') {
+        if (c === '') {
             $('div.search-result').hide();
             return;
         }
@@ -15,12 +15,21 @@ $(document).ready(function() {
                 'c' : c
             }),
             success : function(data) {
-                var html = '<ul>';
-                for(var i in data) {
-                    html += '<li>' + data[i].title + '</li>';
+                var item,
+                    html;
+                $('div.search-result ul.list li.item').remove();
+                for (var i in data) {
+                    html = data[i].title;
+                    pageId = data[i].pageId;
+                    html = html.replace(c, '<b>' + c + '</b>');
+                    item = $('div.search-result ul.list .template').clone();
+                    item.find('.link').attr('href','/view/'+pageId);
+                    item.removeClass('hidden template');
+                    item.addClass('item');
+                    item.find('.text').html(html);
+                    $('div.search-result ul.list').append(item);
                 }
-                html +='</ul>';
-                $('div.search-result').html(html);
+
                 $('div.search-result').show();
             },
             error : function() {

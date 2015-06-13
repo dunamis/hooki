@@ -5,7 +5,9 @@
     <ul class='tab-list'>
         <%
         subMenuSelected = [];
-        subMenuSelected[subPageName] = 'selected';
+        if(typeof subPageName !== 'undefined') {
+            subMenuSelected[subPageName] = 'selected';
+        }
         %>
         <li class='<%=subMenuSelected['review'] || ""%>'>
             <a href='/review'>후기</a>
@@ -28,13 +30,20 @@
             <i class='glyphicon glyphicon-search'></i>
             <input type="search" class="form-control" placeholder="후기 검색" name='search-keyword'>
             </input>
-            <div class='search-result'>aa</div>
+            <div class='search-result'>
+                <ul class='list'>
+                    <li class='template hidden'>
+                        <a class='link' href=#''><img class='image' src="/static/img/no_image_available.png"> <span class='text'></span></a>
+                    </li>
+                </ul>
+
+            </div>
         </div>
         <a class="round-btn write-btn" href="/write"> 후기 작성 </a>
-        <%if (login == '1') { %>
-            <a class="round-btn login-btn" href="/review?login=0"> 로그아웃 </a>
+        <%if (typeof login !== 'undefined' && login == '1') { %>
+        <a class="round-btn login-btn" href="/review?login=0"> 로그아웃 </a>
         <%} else { %>
-            <a class="round-btn login-btn" href="/login_service"> 로그인 </a>
+        <a class="round-btn login-btn" href="/login_service"> 로그인 </a>
         <%} %>
     </div>
 </div>

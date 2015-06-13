@@ -65,7 +65,7 @@ div.top-bar .search-block .search-result {
     width: 300px;
     top: 50px;
     z-index: 999;
-    display:none;
+    display: none;
 }
 
 div.top-bar .round-btn {
@@ -87,4 +87,43 @@ div.top-bar .login-btn {
 div.top-bar .write-btn {
     margin-right: 8px;
     width: 100px;
+}
+
+ul.review-list {
+    list-style: none;
+    padding-left: 0px;
+}
+
+ul.review-list li {
+    border-bottom: 1px solid #EEE;
+}
+
+ul.review-list .thumb img {
+    width: 100px;
+}
+
+div.search-block div.search-result ul.list {
+    list-style-type: none;
+    padding: 5px 5px;
+}
+
+div.search-block div.search-result ul.list li.item {
+    height: 50px;
+    border-bottom: 1px solid #eee;
+    padding-top: 10px;
+    margin-bottom: 20px;
+}
+
+div.search-block div.search-result ul.list li.item img.image {
+    width: 60px;
+    position: absolute
+}
+
+div.search-block div.search-result ul.list li.item span.text {
+    font-size: 12px;
+    position: absolute;
+    left: 70px;
+    height: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
