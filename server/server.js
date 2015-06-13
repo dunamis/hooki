@@ -1,4 +1,5 @@
 var HookiProvider = require("./hookiprovider").HookiProvider;
+var LoginService = require("./loginservice");
 var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
@@ -32,6 +33,9 @@ var WebServer = {
         // mongodb 초기화 및 후기 객체 생성
         var hookiProvider = new HookiProvider('localhost', 27017, DB_NAME);
 
+        // login service initialization
+        var loginService = new LoginService();
+
         // body parser middleware 사용
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({
@@ -55,7 +59,7 @@ var WebServer = {
 
         // page 요청 라우팅
         app.get('/', function(req, res) {
-            res.redirect('/review?login=0');
+            res.redirect('/review');
             res.end();
         });
 
@@ -66,7 +70,7 @@ var WebServer = {
                 res.render('views/review', {
                     reviews : items,
                     subPageName : 'review',
-                    login : loginStatus
+                    login : loginService.getLoginStatus()
                 });
             });
         });
@@ -74,7 +78,7 @@ var WebServer = {
         app.get('/login_service', function(req, res) {
             res.render('views/login_service', {
                 subPageName : "login",
-                login : '-1'
+                login : loginService.getLoginStatus()
             });
         });
 
@@ -148,18 +152,20 @@ var WebServer = {
             var username = req.body.username;
             var password = req.body.password;
 
-            if (username === 'ciogenis@gmail.com' && password === '1234') {
-                login = true;
-            }
+            login = loginService.checkLoginInput(username, password);
 
             if (login === true) {
-                res.redirect('/review?login=1');
+                res.redirect('/review');
             } else {
-                res.render('views/login_service', {
-                    subPageName : 'login',
-                    login : '0' // login failed
-                });
+                res.redirect('/login_service');
             }
+        });
+
+        app.post('/logout', function(req, res) {
+            console.log('logout');
+            loginService.setLoginStatus("-1");
+
+            res.redirect('/review');
         });
 
         app.post('/autoComplete', function(req, res) {

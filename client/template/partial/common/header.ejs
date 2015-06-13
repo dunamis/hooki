@@ -41,9 +41,12 @@
         </div>
         <a class="round-btn write-btn" href="/write"> 후기 작성 </a>
         <%if (typeof login !== 'undefined' && login == '1') { %>
-        <a class="round-btn login-btn" href="/review?login=0"> 로그아웃 </a>
+        <form role="form" method="post" action="/logout" class="form-horizontal">
+            <a class="round-btn login-btn" href="javascript:;" onclick="parentNode.submit();"> 로그아웃 </a>
+        </form>
         <%} else { %>
         <a class="round-btn login-btn" href="/login_service"> 로그인 </a>
         <%} %>
+        </div>
     </div>
 </div>
