@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ../partial/common/head %>
+    </head>
+    <body>
+        <div class='header-wrap'>
+            <% include ../partial/common/header %>
+        </div>
+        <div class='content'>
+            <div class='hooki-wrap'>
+                <div class='hooki-block'>
+                    <ul class='list'>
+                        <% hookis.forEach(function(hooki) { %>
+                        <li class='item'>
+                            <span class='thumb'><img src='/static/img/no_image_available.png'></span>
+                            <span class='title'><a href='/view/<%=hooki.pageId%>'><%= hooki.title %></a></span>
+                            <span class='tag label label-info'><%= hooki.tag %></span>
+                            <span class='nick' style='display:none'></span>
+                            <span class='score' style='display:none'><%= hooki.score %></span>
+                            <span class='etc' style='display:none'><%= hooki.date %><%= hooki.content %></span>
+                        </li>
+                        <% }); %>
+                    </ul>
+                </div>
+            </div>
+            <div class='tag-block'>
+                <h3>태그 리스트</h3>
+                <span class='tag label label-warning'>가나다</span><span class='tag label label-warning'>라마바</span><span class='tag label label-warning'>아자차</span>
+            </div>
+        </div>
+        <div class='footer-wrap'>
+            <% include ../partial/common/footer %>
+        </div>
+    </body>
+    <% include ../partial/common/foot %>
+</html>

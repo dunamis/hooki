@@ -25,6 +25,7 @@ div.top-bar {
     height: 65px;
     border-bottom: 1px solid #EEE;
 }
+
 div.top-bar .logo {
     display: inline-block;
     float: left;
@@ -89,17 +90,39 @@ div.top-bar .write-btn {
     width: 100px;
 }
 
-ul.review-list {
+div.hooki-wrap {
+    width: auto;
+    margin-right: 400px;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    border-right: 1px solid #eee;
+}
+
+div.hooki-block {
+    width: 680px;
+    //border: 1px solid #eee;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.hooki-block ul.list {
     list-style: none;
     padding-left: 0px;
 }
 
-ul.review-list li {
+div.hooki-block ul.list li {
     border-bottom: 1px solid #EEE;
 }
 
-ul.review-list .thumb img {
+div.hooki-block ul.list .thumb img {
     width: 100px;
+}
+
+div.tag-block {
+    width: 350px;
+    position: absolute;
+    right: 0px;
+    top: 65px;
 }
 
 div.search-block div.search-result ul.list {

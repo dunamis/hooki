@@ -59,17 +59,17 @@ var WebServer = {
 
         // page 요청 라우팅
         app.get('/', function(req, res) {
-            res.redirect('/review');
+            res.redirect('/hooki');
             res.end();
         });
 
-        app.get('/review', function(req, res) {
-            hookiProvider.findAll(10, function(err, items) {
+        app.get('/hooki', function(req, res) {
+            hookiProvider.findAll(10, function(err, hookis) {
                 var loginStatus = req.param('login');
                 console.log(items.length);
-                res.render('views/review', {
-                    reviews : items,
-                    subPageName : 'review',
+                res.render('views/hooki', {
+                    hookis : items,
+                    subPageName : 'hooki',
                     login : loginService.getLoginStatus()
                 });
             });
