@@ -20,6 +20,16 @@ var WEBSERVER_PORT_LIST = {
 var WEBSERVER_PORT = process.env['port'] || WEBSERVER_PORT_LIST[process.env['USER']];
 var DB_NAME = process.env['USER'] + '_hooki';
 
+//라우터
+var hookiRouter = require('./subpage/hooki');
+var tagsRouter = require('./subpage/tags');
+var usersRouter = require('./subpage/users');
+var productsRouter = require('./subpage/product');
+var loginRouter = require('./subpage/login');
+var singlePagesRouter = require('./subpage/singlepages');
+var requestRouter = require('./subpage/request');
+var ajaxRouter = require('./subpage/ajax');
+
 // 웹서버 객체
 var WebServer = {
     server : null,
@@ -45,59 +55,49 @@ var WebServer = {
         // static 파일 요청 처리
         app.use('/static', express.static(path.join(__dirname, '/../client/static/')));
 
-        // favicon 처리
-        app.get('/favicon.ico', function(req, res) {
-            res.sendFile(path.join(__dirname, '../client/static/img/favicon.ico'), {
-                headers : {
-                    "Content-Type" : "image/x-icon"
-                }
-            }, function(err) {
-                if (err)
-                    throw err;
-            });
-        });
-
         // page 요청 라우팅
         app.get('/', function(req, res) {
-            res.redirect('/hooki');
+            res.redirect('/home');
             res.end();
         });
 
-        app.get('/hooki', function(req, res) {
-            hookiProvider.findAll(10, function(err, hookis) {
-                var loginStatus = req.param('login');
-                console.log(items.length);
-                res.render('views/hooki', {
-                    hookis : items,
-                    subPageName : 'hooki',
-                    login : loginService.getLoginStatus()
-                });
-            });
+        // provider 삽입을 위한  middleware
+        app.use('/*', function(req, res, next) {
+            req.hookiProvider = hookiProvider;
+            req.loginService = loginService;
+            next();
         });
 
-        app.get('/login_service', function(req, res) {
-            res.render('views/login_service', {
-                subPageName : "login",
-                login : loginService.getLoginStatus()
-            });
+        // submenu 표시를 위한 middleware
+        app.use('/:submenu*', function(req, res, next) {
+            var submenu = req.params.submenu;
+            if (['hooki', 'tags', 'users', 'request', 'product'].indexOf(submenu) != -1) {
+                req.submenu = submenu;
+            }
+            next();
         });
 
-        //임시로 사용중이 인 것임.
-        app.get('/:subPageName', function(req, res) {
-            var subPageName = req.params.subPageName;
-            console.log('call page:' + subPageName);
-            res.render('views/' + subPageName, {
-                title : 'Start page',
-                subPageName : subPageName,
-            });
-        });
-        /*
-         app.get('/write', function(req, res) {
-         res.render('views/write', {
-         title : 'Write page'
-         });
-         });
-         */
+        // 신나게 라우팅
+        app.get('/favicon.ico', singlePagesRouter.favicon);
+        app.get('/home', singlePagesRouter.home);
+        app.get('/hooki', hookiRouter.list);
+        app.get('/hooki/tagged/:tag', hookiRouter.taggedList);
+        app.get('/hooki/read/:pageId', hookiRouter.read);
+        app.get('/hooki/write', hookiRouter.write);
+        app.post('/hooki/write', hookiRouter.submitWriteForm);
+        app.get('/hooki/write/draft', hookiRouter.draft);
+        app.post('/hooki/write/draft', hookiRouter.submitDraftForm);
+        app.get('/tags', tagsRouter.list);
+        app.get('/users', usersRouter.list);
+        app.get('/users/:nick', usersRouter.detail);
+        app.get('/request', requestRouter.request);
+        app.post('/request', requestRouter.submitForm);
+        app.get('/product', productsRouter.list);
+        app.get('/product/:productName', productsRouter.detail);
+        app.get('/login', loginRouter.login);
+        app.post('/login', loginRouter.submitLoginForm);
+        app.get('/logout', loginRouter.logout);
+
         app.use(multer({
             upload : null,
             onFileUploadStart : function(file) {
@@ -112,74 +112,19 @@ var WebServer = {
             onFileUploadComplete : function(file) {
                 console.log('[onFileUploadComplete]' + file.fieldname + ' uploaded to  ' + file.path);
                 this.upload.end();
+                // FIXME : 자바스크립트 변수 사용시 항상 var로 선언 할것. 그렇지 않은 경우 global 변수로 선언됨.
+                // 참고로 자바스크립트의 변수 scope는 함수임.
+                // 걍 테스트 용이라 믿고 있음.
                 done = true;
             }
         }));
 
         app.post('/api/photo', function(req, res) {
+            // FIXME : 멀티 컨넥션이 고려되지 않음. 걍 테스트 용이라 믿고 있음.
             if (done == true) {
                 console.log(req.files);
                 res.end("File uploaded.");
             }
-        });
-
-        app.get('/profile/:userId', function(req, res) {
-            var userId = req.params.userId;
-            res.render('views/profile', {
-                title : 'Profile page',
-                userId : userId
-            });
-        });
-
-        app.get('/view/:pageId', function(req, res) {
-            var pageId = req.params.pageId;
-            res.render('views/view', {
-                title : 'View page',
-                pageId : pageId
-            });
-        });
-
-        app.get('/product/:productId', function(req, res) {
-            var productId = req.params.productId;
-            res.render('views/product', {
-                title : 'Proudct page',
-                productId : productId
-            });
-        });
-
-        app.post('/login', function(req, res) {
-            var login = false;
-            var username = req.body.username;
-            var password = req.body.password;
-
-            login = loginService.checkLoginInput(username, password);
-
-            if (login === true) {
-                res.redirect('/review');
-            } else {
-                res.redirect('/login_service');
-            }
-        });
-
-        app.post('/logout', function(req, res) {
-            console.log('logout');
-            loginService.setLoginStatus("-1");
-
-            res.redirect('/review');
-        });
-
-        app.post('/autoComplete', function(req, res) {
-            var c = req.body.c;
-            console.log('[autoComplete 요청]', c);
-            var condition = {
-                'title' : {
-                    $regex : '.*' + c + '.*'
-                }
-            };
-            hookiProvider.findByCondition(condition, function(err, items) {
-                console.log(items);
-                res.send(items);
-            });
         });
 
         this.server = app.listen(WEBSERVER_PORT);

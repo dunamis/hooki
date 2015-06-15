@@ -4,6 +4,7 @@ var BSON = mongo.BSON;
 var ObjectID = mongo.ObjectID;
 var curDB;
 
+// FIXME: 여러 모듈에서 컨넥션을 공유할 것이므로, 현재의 구조가 맞는지 검토 필요함.
 HookiProvider = function(host, port, dbName) {
     var url = 'mongodb://' + host + ':' + port + '/' + dbName;
     console.log("HookiProvider initialized. Connecting to MongoDB... " + url);

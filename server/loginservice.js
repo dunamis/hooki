@@ -1,5 +1,6 @@
 var express = require('express');
 
+// FIXME : 멀티 컨넥션이 고려되지 않음. express-session으로 재구현 요망.
 var loginStatus;
 
 LoginService = function() {

@@ -5,11 +5,11 @@
     <ul class='tab-list'>
         <%
         subMenuSelected = [];
-        if(typeof subPageName !== 'undefined') {
-            subMenuSelected[subPageName] = 'selected';
+        if(typeof submenu !== 'undefined') {
+        subMenuSelected[submenu] = 'selected';
         }
         %>
-        <li class='<%=subMenuSelected['review'] || ""%>'>
+        <li class='<%=subMenuSelected['hooki'] || ""%>'>
             <a href='/hooki'>후기</a>
         </li>
         <li class='<%=subMenuSelected['tags'] || ""%>'>
@@ -40,14 +40,12 @@
 
             </div>
         </div>
-        <a class="round-btn write-btn" href="/write"> 후기 작성 </a>
+        <a class="round-btn write-btn" href="/hooki/write"> 후기 작성 </a>
         <%if (typeof login !== 'undefined' && login == '1') { %>
-        <form role="form" method="post" action="/logout" class="form-horizontal">
-            <a class="round-btn login-btn" href="javascript:;" onclick="parentNode.submit();"> 로그아웃 </a>
-        </form>
+        <a class="round-btn login-btn" href="/logout"> 로그아웃 </a>
         <%} else { %>
-        <a class="round-btn login-btn" href="/login_service"> 로그인 </a>
+        <a class="round-btn login-btn" href="/login"> 로그인 </a>
         <%} %>
-        </div>
     </div>
+</div>
 </div>
