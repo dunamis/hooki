@@ -2,7 +2,7 @@ var path = require('path');
 
 exports.home = function(req, res) {
     res.render('views/home', {
-        login : req.loginService.getLoginStatus()
+        login : req.loginService.getLoginStatus(req)
     });
 };
 

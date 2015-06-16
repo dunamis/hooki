@@ -3,7 +3,7 @@ exports.list = function(req, res) {
         res.render('views/hooki', {
             submenu : req.submenu,
             hookis : hookis,
-            login : req.loginService.getLoginStatus()
+            login : req.loginService.getLoginStatus(req)
         });
     });
 };

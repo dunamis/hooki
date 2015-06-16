@@ -1,38 +1,33 @@
 var express = require('express');
 
-// FIXME : 멀티 컨넥션이 고려되지 않음. express-session으로 재구현 요망.
-var loginStatus;
-
 LoginService = function() {
-    loginStatus = '-1'
-
     console.log("new loginservice");
 };
 
-LoginService.prototype.checkLoginInput = function(userid, passwd) {
-    console.log("check login input");
-
+LoginService.prototype.checkLoginInput = function(req, userid, passwd) {
     if (userid === 'ciogenis@gmail.com' && passwd === '1234') {
-        loginStatus = '1';
+        req.session.users[req.sessionID] = "success";
         return true;
     }
     else {
-        loginStatus = '0';
+        req.session.users[req.sessionID] = "fail";
         return false;
     }
 };
 
-LoginService.prototype.getLoginStatus = function() {
-    console.log("get login status : " + loginStatus);
+LoginService.prototype.getLoginStatus = function(req) {
+    if (!req.session.users) {
+        return "undefined";
+    }
 
-    return loginStatus;
+    console.log("sid : " + req.sessionID);
+    console.log("get login status : " + req.session.users[req.sessionID]);
+
+    return req.session.users[req.sessionID];
 };
 
-LoginService.prototype.setLoginStatus = function(input) {
-    console.log("set login status : " + input);
-    loginStatus = input;
-
-    console.log("current status : " + loginStatus);
-}
+LoginService.prototype.setLoginStatus = function(req, input) {
+   req.session.users[req.sessionID] = input;
+};
 
 module.exports = LoginService;

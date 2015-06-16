@@ -22,10 +22,14 @@
                         <label for="pwd">Password:</label>
                         <input type="password" class="form-control" id="pwd" placeholder="Enter Password" name="password">
                     </div>
-                    <%if (login == '0') { %>
-                        <p style='color:red'>아이디 없는데요??</p>
+                    <%if (login == 'fail') { %>
+                    <p style='color:red'>
+                        아이디 없는데요??
+                    </p>
                     <% } %>
-                    <button type="submit" class="btn btn-info">Login</button>
+                    <button type="submit" class="btn btn-info">
+                        Login
+                    </button>
                 </form>
             </div>
         </div>

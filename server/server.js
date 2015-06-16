@@ -2,6 +2,7 @@ var HookiProvider = require("./hookiprovider").HookiProvider;
 var LoginService = require("./loginservice");
 var express = require("express");
 var bodyParser = require("body-parser");
+var session = require("express-session");
 var app = express();
 var process = require('process');
 var fs = require('fs');
@@ -45,6 +46,11 @@ var WebServer = {
 
         // login service initialization
         var loginService = new LoginService();
+
+        app.use(session({
+            secret: 'hooki hooki',
+            resave: false
+        }));
 
         // body parser middleware 사용
         app.use(bodyParser.json());
