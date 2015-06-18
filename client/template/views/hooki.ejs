@@ -14,8 +14,10 @@
                         <% hookis.forEach(function(hooki) { %>
                         <li class='item'>
                             <span class='thumb'><img src='/static/img/no_image_available.png'></span>
-                            <span class='title'><a href='/hooki/read/<%=hooki.pageId%>'><%= hooki.title %></a></span>
-                            <span class='tag label label-info'><%= hooki.tag %></span>
+                            <span class='title'><a href='/hooki/read/<%=hooki.serial%>'><%= hooki.title %></a></span>
+                            <% hooki.tags.forEach(function(tag) { %>
+                            <span class='tag label label-info'><%= tag %></span>
+                            <% }); %>
                             <span class='nick' style='display:none'></span>
                             <span class='score' style='display:none'><%= hooki.score %></span>
                             <span class='etc' style='display:none'><%= hooki.date %><%= hooki.content %></span>
