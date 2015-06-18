@@ -1,9 +1,7 @@
 var path = require('path');
 
 exports.home = function(req, res) {
-    res.render('views/home', {
-        login : req.loginRouter.getLoginStatus(req)
-    });
+    res.render('views/home', req.ejsData);
 };
 
 exports.favicon = function(req, res) {

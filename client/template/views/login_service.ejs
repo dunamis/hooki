@@ -13,20 +13,16 @@
             <div class="jumbotron">
                 <h2>로그인</h2>
                 <br>
-                <form role="form" method="post" action="/login">
+                <form class='login-form' role="form" method="post" action="/login">
                     <div class="form-group">
                         <label for="email">Email address:</label>
-                        <input type="email" class="form-control" id="email" placeholder="Enter Email" name="username">
+                        <input type="email" class="form-control email" placeholder="Enter Email (a@mail.com, b@mail.com만 가능)" name="username">
                     </div>
                     <div class="form-group">
                         <label for="pwd">Password:</label>
-                        <input type="password" class="form-control" id="pwd" placeholder="Enter Password" name="password">
+                        <input type="password" class="form-control pwd" placeholder="Enter Password (아무거나 가능)" name="password">
                     </div>
-                    <%if (login == 'fail') { %>
-                    <p style='color:red'>
-                        아이디 없는데요??
-                    </p>
-                    <% } %>
+                    <p class ='login-fail-msg' style='color:red'></p>
                     <button type="submit" class="btn btn-info">
                         Login
                     </button>
@@ -37,5 +33,41 @@
         <div class='footer-wrap'>
             <% include ../partial/common/footer %>
         </div>
+
     </body>
+    <% include ../partial/common/foot %>
+    <script>
+        $(document).ready(function() {
+            $('.login-form').submit(function(event) {
+                var email = $('.login-form input.email').val();
+                var password = $('.login-form input.pwd').val();
+
+                if (!email || !password) {
+                    $('.login-form .login-fail-msg').text('아이디 / 패스워드를 입력하세요');
+                    return false;
+                }
+
+                $.ajax({
+                    url : '/login',
+                    method : 'POST',
+                    contentType : 'application/json',
+                    data : JSON.stringify({
+                        email : email,
+                        password : password
+                    }),
+                    success : function(data) {
+                        if (data.success) {
+                            window.location = '/';
+                        } else {
+                            $('.login-form .login-fail-msg').text(data.msg);
+                        }
+                    },
+                    error : function() {
+                    }
+                });
+
+                event.preventDefault();
+            });
+        });
+    </script>
 </html>

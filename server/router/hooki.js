@@ -1,9 +1,7 @@
 exports.list = function(req, res) {
     req.hookiProvider.findAll(10, function(err, hookis) {
-        res.render('views/hooki', {
-            submenu : req.submenu,
-            hookis : hookis,
-        });
+        req.ejsData.hookis = hookis;
+        res.render('views/hooki', req.ejsData);
     });
 };
 
@@ -12,18 +10,13 @@ exports.taggedList = function(req, res) {
 };
 
 exports.read = function(req, res) {
-    var pageId = req.params.pageId;
-    res.render('views/read', {
-        submenu : req.submenu,
-        pageId : pageId
-    });
+    var id = req.params.id;
+    req.ejsData.id = id;
+    res.render('views/read', req.ejsData);
 };
 
 exports.write = function(req, res) {
-    res.render('views/write', {
-        submenu : req.submenu,
-        title : 'Write page'
-    });
+    res.render('views/write', req.ejsData);
 };
 
 exports.submitWriteForm = function(req, res) {

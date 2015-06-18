@@ -41,8 +41,9 @@
             </div>
         </div>
         <a class="round-btn write-btn" href="/hooki/write"> 후기 작성 </a>
-        <%if (typeof login !== 'undefined' && login == 'success') { %>
+        <%if (loginStatus) { %>
         <a class="round-btn login-btn" href="/logout"> 로그아웃 </a>
+        <span>이름 : <%=email %></span>
         <%} else { %>
         <a class="round-btn login-btn" href="/login"> 로그인 </a>
         <%} %>

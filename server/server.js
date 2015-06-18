@@ -1,14 +1,13 @@
-var HookiProvider = require("./hookiprovider").HookiProvider;
+var HookiProvider = require("./submodule/hookiprovider").HookiProvider;
 var express = require("express");
 var bodyParser = require("body-parser");
 var session = require("express-session");
-var app = express();
-var process = require('process');
-var fs = require('fs');
-var path = require('path');
-var curDB;
+var app = express(), process = require('process');
+var fs = require('fs'), path = require('path');
 var multer = require('multer');
 var Grid = require('gridfs-stream');
+var mongoSessStore = require('connect-mongo')(session);
+var curDB;
 var gfs;
 
 // 개발을 위한 포트 및 DB 이름
@@ -17,18 +16,19 @@ var WEBSERVER_PORT_LIST = {
     'ciogenis' : 22222,
     'soopdop' : 33333
 };
+
 var WEBSERVER_PORT = process.env['port'] || WEBSERVER_PORT_LIST[process.env['USER']];
 var DB_NAME = process.env['USER'] + '_hooki';
 
 //라우터
-var hookiRouter = require('./subpage/hooki');
-var tagsRouter = require('./subpage/tags');
-var usersRouter = require('./subpage/users');
-var productsRouter = require('./subpage/product');
-var loginRouter = require('./subpage/login');
-var singlePagesRouter = require('./subpage/singlepages');
-var requestRouter = require('./subpage/request');
-var ajaxRouter = require('./subpage/ajax');
+var hookiRouter = require('./router/hooki');
+var tagsRouter = require('./router/tags');
+var usersRouter = require('./router/users');
+var productsRouter = require('./router/product');
+var loginRouter = require('./router/login');
+var singlePagesRouter = require('./router/singlepages');
+var requestRouter = require('./router/request');
+var ajaxRouter = require('./router/ajax');
 
 // 웹서버 객체
 var WebServer = {
@@ -43,10 +43,18 @@ var WebServer = {
         // mongodb 초기화 및 후기 객체 생성
         var hookiProvider = new HookiProvider('localhost', 27017, DB_NAME);
 
+        // express-session
         app.use(session({
-            secret: 'hooki hooki',
-            resave: false
+            secret : 'hooki hooki',
+            resave : false,
+            store : new mongoSessStore({
+                url : 'mongodb://localhost/' + DB_NAME,
+                ttl : 60 * 60,
+            })
         }));
+
+        // login을 위한 middleware
+        app.use(require('./middleware/login.js'));
 
         // body parser middleware 사용
         app.use(bodyParser.json());
@@ -63,12 +71,14 @@ var WebServer = {
             res.end();
         });
 
-        // provider 삽입을 위한  middleware
+        // provider 및 ejs 공통 데이터 삽입을 위한  middleware
         app.use('/*', function(req, res, next) {
             req.hookiProvider = hookiProvider;
             // INFO : loginService 없애고, 일단 순동이 만든 router file에 기능추가
             //        login에 필요한 별도기능들을 모아서 middleware를 만들어 볼 예정
-            req.loginRouter = loginRouter;
+            req.ejsData = {};
+            req.ejsData.loginStatus = req.login.loginStatus;
+            req.ejsData.email = req.login.email;
             next();
         });
 
@@ -76,7 +86,7 @@ var WebServer = {
         app.use('/:submenu*', function(req, res, next) {
             var submenu = req.params.submenu;
             if (['hooki', 'tags', 'users', 'request', 'product'].indexOf(submenu) != -1) {
-                req.submenu = submenu;
+                req.ejsData.submenu = submenu;
             }
             next();
         });
@@ -86,7 +96,7 @@ var WebServer = {
         app.get('/home', singlePagesRouter.home);
         app.get('/hooki', hookiRouter.list);
         app.get('/hooki/tagged/:tag', hookiRouter.taggedList);
-        app.get('/hooki/read/:pageId', hookiRouter.read);
+        app.get('/hooki/read/:id', hookiRouter.read);
         app.get('/hooki/write', hookiRouter.write);
         app.post('/hooki/write', hookiRouter.submitWriteForm);
         app.get('/hooki/write/draft', hookiRouter.draft);
