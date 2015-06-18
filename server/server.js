@@ -1,5 +1,4 @@
 var HookiProvider = require("./hookiprovider").HookiProvider;
-var LoginService = require("./loginservice");
 var express = require("express");
 var bodyParser = require("body-parser");
 var session = require("express-session");
@@ -44,9 +43,6 @@ var WebServer = {
         // mongodb 초기화 및 후기 객체 생성
         var hookiProvider = new HookiProvider('localhost', 27017, DB_NAME);
 
-        // login service initialization
-        var loginService = new LoginService();
-
         app.use(session({
             secret: 'hooki hooki',
             resave: false
@@ -70,7 +66,9 @@ var WebServer = {
         // provider 삽입을 위한  middleware
         app.use('/*', function(req, res, next) {
             req.hookiProvider = hookiProvider;
-            req.loginService = loginService;
+            // INFO : loginService 없애고, 일단 순동이 만든 router file에 기능추가
+            //        login에 필요한 별도기능들을 모아서 middleware를 만들어 볼 예정
+            req.loginRouter = loginRouter;
             next();
         });
 
