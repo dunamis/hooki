@@ -74,8 +74,6 @@ var WebServer = {
         // provider 및 ejs 공통 데이터 삽입을 위한  middleware
         app.use('/*', function(req, res, next) {
             req.hookiProvider = hookiProvider;
-            // INFO : loginService 없애고, 일단 순동이 만든 router file에 기능추가
-            //        login에 필요한 별도기능들을 모아서 middleware를 만들어 볼 예정
             req.ejsData = {};
             req.ejsData.loginStatus = req.login.loginStatus;
             req.ejsData.email = req.login.email;
