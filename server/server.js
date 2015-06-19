@@ -43,6 +43,7 @@ var WebServer = {
         // mongodb 초기화 및 후기 객체 생성
         var hookiProvider = new HookiProvider('localhost', 27017, DB_NAME);
 
+        // 사용할 미들웨어 등록
         // express-session
         app.use(session({
             secret : 'hooki hooki',
@@ -52,25 +53,15 @@ var WebServer = {
                 ttl : 60 * 60,
             })
         }));
-
         // login을 위한 middleware
         app.use(require('./middleware/login.js'));
-
         // body parser middleware 사용
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({
             extended : true
         }));
-
         // static 파일 요청 처리
         app.use('/static', express.static(path.join(__dirname, '/../client/static/')));
-
-        // page 요청 라우팅
-        app.get('/', function(req, res) {
-            res.redirect('/home');
-            res.end();
-        });
-
         // provider 및 ejs 공통 데이터 삽입을 위한  middleware
         app.use('/*', function(req, res, next) {
             req.hookiProvider = hookiProvider;
@@ -79,37 +70,9 @@ var WebServer = {
             req.ejsData.email = req.login.email;
             next();
         });
-
         // submenu 표시를 위한 middleware
-        app.use('/:submenu*', function(req, res, next) {
-            var submenu = req.params.submenu;
-            if (['hooki', 'tags', 'users', 'request', 'product'].indexOf(submenu) != -1) {
-                req.ejsData.submenu = submenu;
-            }
-            next();
-        });
-
-        // 신나게 라우팅
-        app.get('/favicon.ico', singlePagesRouter.favicon);
-        app.get('/home', singlePagesRouter.home);
-        app.get('/hooki', hookiRouter.list);
-        app.get('/hooki/tagged/:tag', hookiRouter.taggedList);
-        app.get('/hooki/read/:id', hookiRouter.read);
-        app.get('/hooki/write', hookiRouter.write);
-        app.post('/hooki/write', hookiRouter.submitWriteForm);
-        app.get('/hooki/write/draft', hookiRouter.draft);
-        app.post('/hooki/write/draft', hookiRouter.submitDraftForm);
-        app.get('/tags', tagsRouter.list);
-        app.get('/users', usersRouter.list);
-        app.get('/users/:nick', usersRouter.detail);
-        app.get('/request', requestRouter.request);
-        app.post('/request', requestRouter.submitForm);
-        app.get('/product', productsRouter.list);
-        app.get('/product/:productName', productsRouter.detail);
-        app.get('/login', loginRouter.login);
-        app.post('/login', loginRouter.submitLoginForm);
-        app.get('/logout', loginRouter.logout);
-
+        app.use('/:submenu*', require('./middleware/submenu.js'));
+        // multer : multipart data 핸들링
         app.use(multer({
             upload : null,
             onFileUploadStart : function(file) {
@@ -130,6 +93,30 @@ var WebServer = {
                 done = true;
             }
         }));
+
+        // 신나게 라우팅
+        app.get('/', singlePagesRouter.root);
+        app.get('/favicon.ico', singlePagesRouter.favicon);
+        app.get('/home', singlePagesRouter.home);
+        app.get('/hooki', hookiRouter.list);
+        app.get('/hooki/tagged/:tag', hookiRouter.taggedList);
+        app.get('/hooki/read/:id', hookiRouter.read);
+        app.get('/hooki/write', hookiRouter.write);
+        app.post('/hooki/write', hookiRouter.submitWriteForm);
+        app.get('/hooki/write/draft', hookiRouter.draft);
+        app.post('/hooki/write/draft', hookiRouter.submitDraftForm);
+        app.get('/tags', tagsRouter.list);
+        app.get('/users', usersRouter.list);
+        app.get('/users/:nick', usersRouter.detail);
+        app.get('/request', requestRouter.request);
+        app.post('/request', requestRouter.submitForm);
+        app.get('/product', productsRouter.list);
+        app.get('/product/:productName', productsRouter.detail);
+        app.get('/login', loginRouter.login);
+        app.post('/login', loginRouter.submitLoginForm);
+        app.get('/logout', loginRouter.logout);
+        app.post('/search', ajaxRouter.search);
+
 
         app.post('/api/photo', function(req, res) {
             // FIXME : 멀티 컨넥션이 고려되지 않음. 걍 테스트 용이라 믿고 있음.

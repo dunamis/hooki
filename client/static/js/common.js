@@ -8,7 +8,7 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url : '/autoComplete',
+            url : '/search',
             type : 'POST',
             contentType : 'application/json',
             data : JSON.stringify({
@@ -26,10 +26,10 @@ $(document).ready(function() {
 
                 for (var i in data) {
                     html = data[i].title;
-                    pageId = data[i].pageId;
+                    serial = data[i].serial;
                     html = html.replace(c, '<b>' + c + '</b>');
                     item = $('div.search-result ul.list .template').clone();
-                    item.find('.link').attr('href', '/view/' + pageId);
+                    item.find('.link').attr('href', '/hooki/read/' + serial);
                     item.removeClass('hidden template');
                     item.addClass('item');
                     item.find('.text').html(html);
