@@ -1,7 +1,14 @@
+var cp = require('../modules/contentprovider');
+
 exports.list = function(req, res) {
     req.hookiProvider.findAll(10, function(err, hookis) {
         req.ejsData.hookis = hookis;
-        res.render('views/hooki', req.ejsData);
+        cp.getTagList({
+            limits : 100
+        }, function(items) {
+            req.ejsData.tags = items;
+            res.render('views/hooki', req.ejsData);
+        });
     });
 };
 
