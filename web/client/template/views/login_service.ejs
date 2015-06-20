@@ -13,7 +13,7 @@
             <div class="jumbotron">
                 <h2>로그인</h2>
                 <br>
-                <form class='login-form' role="form" method="post" action="/login">
+                <form class='login-form' role="form">
                     <div class="form-group">
                         <label for="email">Email address:</label>
                         <input type="email" class="form-control email" placeholder="Enter Email (a@mail.com, b@mail.com만 가능)" name="username">
@@ -48,7 +48,7 @@
                 }
 
                 $.ajax({
-                    url : '/login',
+                    url : '/account/login',
                     method : 'POST',
                     contentType : 'application/json',
                     data : JSON.stringify({

@@ -1,4 +1,7 @@
-exports.search = function(req, res) {
+var router = require('express').Router();
+var cp = require('../modules/contentprovider');
+
+router.post('/search', function(req, res) {
     var c = req.body.c;
     var condition = {
         'title' : {
@@ -8,4 +11,6 @@ exports.search = function(req, res) {
     req.hookiProvider.findByCondition(condition, function(err, items) {
         res.send(items);
     });
-};
+});
+
+module.exports = router;

@@ -1,3 +1,6 @@
+var router = require('express').Router();
+var cp = require('../modules/contentprovider');
+
 function checkLoginInput(email, passwd) {
     if (email === 'a@mail.com' || email === 'b@mail.com') {
         return true;
@@ -6,11 +9,11 @@ function checkLoginInput(email, passwd) {
     }
 };
 
-exports.login = function(req, res) {
+router.get('/login', function(req, res) {
     res.render('views/login_service', req.ejsData);
-};
+});
 
-exports.submitLoginForm = function(req, res) {
+router.post('/login', function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
 
@@ -26,10 +29,12 @@ exports.submitLoginForm = function(req, res) {
             msg : '아이디 혹은 패스워드가 틀립니다.'
         });
     }
-};
+});
 
-exports.logout = function(req, res) {
+router.get('/logout', function(req, res) {
     console.log(req.session.email + ' logout');
     req.session.destroy();
     res.redirect('/');
-};
+});
+
+module.exports = router;

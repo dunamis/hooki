@@ -1,15 +1,12 @@
+var router = require('express').Router();
 var path = require('path');
 
-exports.root = function(req, res) {
+router.get('/', function(req, res) {
     res.redirect('/home');
     res.end();
-};
+});
 
-exports.home = function(req, res) {
-    res.render('views/home', req.ejsData);
-};
-
-exports.favicon = function(req, res) {
+router.get('/favicon.ico', function(req, res) {
     res.sendFile(path.join(__dirname, '../../client/static/img/favicon.ico'), {
         headers : {
             "Content-Type" : "image/x-icon"
@@ -18,4 +15,10 @@ exports.favicon = function(req, res) {
         if (err)
             throw err;
     });
-};
+});
+
+router.get('/home', function(req, res) {
+    res.render('views/home', req.ejsData);
+});
+
+module.exports = router;

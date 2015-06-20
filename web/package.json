@@ -1,24 +1,23 @@
 {
-  "name": "server",
+  "name": "hooki",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "dependencies": {
     "async": "^1.2.1",
     "body-parser": "^1.13.0",
     "connect-mongo": "^0.8.1",
     "ejs": "^2.3.1",
-    "express": "^4.12.4",
-    "express-session": "^1.11.3",
     "gridfs-stream": "^1.1.1",
+    "express-session": "^1.11.3",
+    "express": "^4.12.4",
     "mongodb": "^2.0.33",
-    "multer": "^0.1.8",
-    "process": "^0.11.1"
+    "process": "^0.11.1",
+    "multer": "^0.1.8"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC"

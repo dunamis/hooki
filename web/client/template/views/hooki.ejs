@@ -28,7 +28,9 @@
             </div>
             <div class='tag-block'>
                 <h3>태그 리스트</h3>
-                <span class='tag label label-warning'>가나다</span><span class='tag label label-warning'>라마바</span><span class='tag label label-warning'>아자차</span>
+                <% tags.forEach(function(tags) { %>
+                    <span class='tag label label-warning'><%= tags.tag%></span>
+                <% }); %>
             </div>
         </div>
         <div class='footer-wrap'>
