@@ -34,8 +34,8 @@ stable 버전의 nodejs 사용 방법
 서버는 다음과 같이 실행한다. 사용자마다 포트가 정의된다. (실행 후 메세지 확인)
 
     $ git clone git@github.com:dunamis/hooki.git
-    $ cd hooki
-    $ node server
+    $ cd hooki/web
+    $ node index
 
 위와 같이 `https`가 아니라 `ssh`로 clone을 받아야 매번 push할때마다 아이디 패스워드를 입력하지 않아도 된다. (공개키등록시)
 
@@ -43,8 +43,8 @@ stable 버전의 nodejs 사용 방법
 `supervisor`를 이용하면 파일을 수정하는 즉시 반영되어 server가 재실행되어 편리하다.
 
     $ npm install -g supervisor
-    $ cd hooki
-    $ node server
+    $ cd hooki/web
+    $ node index
 
 -g를 이용하여 global 위치에 설치해도 `nvm` 사용시엔 각 유저 디렉토리에 설치되므로 관리가 편하다.
 

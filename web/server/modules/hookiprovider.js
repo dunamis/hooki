@@ -1,26 +1,10 @@
 var mongo = require('mongodb');
-var MongoClient = mongo.MongoClient;
-var BSON = mongo.BSON;
 var ObjectID = mongo.ObjectID;
-var curDB;
+var curDB = require('./dbconnector');
 
-// FIXME: 여러 모듈에서 컨넥션을 공유할 것이므로, 현재의 구조가 맞는지 검토 필요함.
-HookiProvider = function(host, port, dbName) {
-    var url = 'mongodb://' + host + ':' + port + '/' + dbName;
-    console.log("HookiProvider initialized. Connecting to MongoDB... " + url);
-    // mongodb 초기화
-    MongoClient.connect(url, function(error, db) {
-        if (error)
-            throw error;
-        else {
-            curDB = db;
-        }
-    });
-};
-
-HookiProvider.prototype.getCollection = function(callback) {
+exports.getCollection = function(callback) {
     console.log("[HookiProvider:getCollection] function called");
-    var collection = curDB.collection('hooki', function(error, hookiCollection) {
+    var collection = curDB.getDb().collection('hooki', function(error, hookiCollection) {
         if (error)
             callback(error);
         else {
@@ -30,7 +14,7 @@ HookiProvider.prototype.getCollection = function(callback) {
     });
 };
 
-HookiProvider.prototype.findAll = function(limits, callback) {
+exports.findAll = function(limits, callback) {
     this.getCollection(function(error, hookiCollection) {
         if (error)
             callback(error);
@@ -54,7 +38,7 @@ HookiProvider.prototype.findAll = function(limits, callback) {
     });
 };
 
-HookiProvider.prototype.findById = function(hookiId, callback) {
+exports.findById = function(hookiId, callback) {
     console.log("[HookiProvider:findById] function called");
     this.getCollection(function(error, hookiCollection) {
         if (error)
@@ -72,7 +56,7 @@ HookiProvider.prototype.findById = function(hookiId, callback) {
     });
 };
 
-HookiProvider.prototype.findByCondition = function(condition, callback) {
+exports.findByCondition = function(condition, callback) {
     console.log("[HookiProvider:findByCondition] function called");
     this.getCollection(function(error, hookiCollection) {
         if (error)
@@ -85,7 +69,7 @@ HookiProvider.prototype.findByCondition = function(condition, callback) {
     });
 };
 
-HookiProvider.prototype.save = function(title, score, tag, content, pageId, callback) {
+exports.save = function(title, score, tag, content, pageId, callback) {
     console.log("[HookiProvider:save] function called");
     this.getCollection(function(error, hookiCollection) {
         if (error)
@@ -105,7 +89,7 @@ HookiProvider.prototype.save = function(title, score, tag, content, pageId, call
     });
 };
 
-HookiProvider.prototype.addCommentToHooki = function(hookiId, comment, callback) {
+exports.addCommentToHooki = function(hookiId, comment, callback) {
     console.log("[HookiProvider:addCommentToHooki] function called");
     this.getCollection(function(error, hookiCollection) {
         if (error)
@@ -126,5 +110,3 @@ HookiProvider.prototype.addCommentToHooki = function(hookiId, comment, callback)
         }
     });
 };
-
-exports.HookiProvider = HookiProvider;

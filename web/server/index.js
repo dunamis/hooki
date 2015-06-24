@@ -1,4 +1,16 @@
-var dbcon = require('./modules/dbconnector'), HookiProvider = require("./modules/hookiprovider").HookiProvider, express = require("express"), bodyParser = require("body-parser"), session = require("express-session"), process = require('process'), fs = require('fs'), path = require('path'), multer = require('multer'), Grid = require('gridfs-stream'), mongoSessStore = require('connect-mongo')(session), curDB, gfs;
+var dbcon = require('./modules/dbconnector'),
+    hookiProvider = require("./modules/hookiprovider"),
+    express = require("express"),
+    bodyParser = require("body-parser"),
+    session = require("express-session"),
+    process = require('process'),
+    fs = require('fs'),
+    path = require('path'),
+    multer = require('multer'),
+    Grid = require('gridfs-stream'),
+    mongoSessStore = require('connect-mongo')(session),
+    curDB,
+    gfs;
 
 function createServer(port) {
     dbcon.connect(function() {
@@ -37,10 +49,6 @@ function addMiddleware(app) {
 
     // static 파일 요청 처리
     app.use('/static', express.static(path.join(__dirname, '/../client/static/')));
-
-    // FIXME: 임시..
-    var DB_NAME = process.env['USER'] + '_hooki';
-    var hookiProvider = new HookiProvider('localhost', 27017, DB_NAME);
 
     // provider 및 ejs 공통 데이터 삽입을 위한  middleware
     app.use('/*', function(req, res, next) {
