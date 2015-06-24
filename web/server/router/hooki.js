@@ -17,10 +17,15 @@ router.get('/tagged/:tag', function(req, res) {
 
 });
 
-router.get('/read/:id', function(req, res) {
-    var id = req.params.id;
-    req.ejsData.id = id;
-    res.render('views/read', req.ejsData);
+router.get('/read/:sn', function(req, res) {
+    var sn = req.params.sn;
+    cp.getHookiContent({
+        'sn' : sn
+    }, function(hooki) {
+        req.ejsData.hooki = hooki;
+        console.log('aaa',hooki);
+        res.render('views/read', req.ejsData);
+    });
 });
 
 router.get('/write', function(req, res) {

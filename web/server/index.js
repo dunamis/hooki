@@ -102,15 +102,6 @@ function addRouter(app) {
     app.use('/product', require('./router/product'));
     app.use('/account', require('./router/account'));
     app.use('/ajax', require('./router/ajax'));
-//
-    // app.get('/tags', tagsRouter.list);
-    // app.get('/users', usersRouter.list);
-    // app.get('/users/:nick', usersRouter.detail);
-    // app.get('/request', requestRouter.request);
-    // app.post('/request', requestRouter.submitForm);
-    // app.get('/product', productsRouter.list);
-    // app.get('/product/:productName', productsRouter.detail);
-    // app.post('/search', ajaxRouter.search);
 };
 
 exports = module.exports = function(port) {
