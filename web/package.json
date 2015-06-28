@@ -13,7 +13,9 @@
     "express": "^4.12.4",
     "mongodb": "^2.0.33",
     "process": "^0.11.1",
-    "multer": "^0.1.8"
+    "multer": "^0.1.8",
+    "passport": "^0.2.2",
+    "passport-facebook": "^2.0.0"
   },
   "devDependencies": {},
   "scripts": {

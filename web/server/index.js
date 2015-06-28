@@ -12,6 +12,8 @@ var dbcon = require('./modules/dbconnector'),
     curDB,
     gfs;
 
+var passport = require('passport');
+
 function createServer(port) {
     dbcon.connect(function() {
         var app = express();
@@ -102,6 +104,7 @@ function addRouter(app) {
     app.use('/product', require('./router/product'));
     app.use('/account', require('./router/account'));
     app.use('/ajax', require('./router/ajax'));
+    app.use('/auth', require('./router/auth'));
 };
 
 exports = module.exports = function(port) {
