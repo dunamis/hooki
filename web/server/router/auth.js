@@ -4,9 +4,6 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 
 var config = require('../modules/accountconfig');
 
-router.use(passport.initialize());
-router.use(passport.session());
-
 passport.use(new FacebookStrategy({
         clientID: config.facebook.app_id,
         clientSecret: config.facebook.app_secret,
@@ -21,12 +18,10 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.serializeUser(function(user, done) {
-    console.log("serializeUser");
     done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
-    console.log("deserializeUser");
     done(null, obj);
 });
 

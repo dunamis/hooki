@@ -39,6 +39,8 @@ function addMiddleware(app) {
             ttl : 60 * 60,
         })
     }));
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     // login을 위한 middleware
     app.use(require('./middleware/login.js'));
@@ -56,7 +58,7 @@ function addMiddleware(app) {
     app.use('/*', function(req, res, next) {
         req.hookiProvider = hookiProvider;
         req.ejsData = {};
-        req.ejsData.loginStatus = req.login.loginStatus;
+        req.ejsData.loginStatus = req.isAuthenticated();
         req.ejsData.email = req.login.email;
         next();
     });
