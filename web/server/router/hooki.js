@@ -32,13 +32,25 @@ router.get('/write', function(req, res) {
     res.render('views/write', req.ejsData);
 });
 
+router.post('/draft', function(req, res) {
+   var title = req.body.title;
+   var content = req.body.content;
+});
+
 router.post('/write', function(req, res) {
+   var title = req.body.title;
+   var content = req.body.content;
 });
 
 router.get('/write/draft', function(req, res) {
+    res.ejdData.isDraft = true;
+    res.render('views/write', req.ejsData);
 });
 
 router.post('/write/draft', function(req, res) {
+   var title = req.body.title;
+   var content = req.body.content;
+   var date = new Date();
 });
 
 module.exports = router;

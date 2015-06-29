@@ -159,3 +159,26 @@ exports.addCommentToHooki = function(hookiId, comment, callback) {
     });
 };
 
+exports.moveDraftToHooki = function(option, callback) {
+    db.collection('hookiDraft', function(error, draftCollec) {
+        if (error)
+            callback(false);
+        draftCollec.findOne({}, function(error, data) {
+            if (error)
+                callback(false);
+
+            db.collection('hooki', function(error, hookiCollec) {
+                if (error)
+                    callback(false);
+
+                hookiCollec.insert(data, function(error, data) {
+                    callback(true);
+                });
+            });
+        });
+    });
+};
+
+exports.upsertHookiDraft = function(option, data, callback) {
+
+};

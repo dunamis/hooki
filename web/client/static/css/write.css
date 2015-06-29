@@ -5,3 +5,21 @@
     background-color:rgba(221,214,221,0.3);
     border:1px dashed black;
 }
+
+
+div.editable-wrap {
+    width: auto;
+    margin-right: 400px;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    border-right: 1px solid #eee;
+}
+
+div.editable {
+    font-size: 20px;
+    outline: 0;
+    width: 680px;
+    //border: 1px solid #eee;
+    margin-left: auto;
+    margin-right: auto;
+}

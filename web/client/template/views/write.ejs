@@ -2,44 +2,67 @@
 <html>
     <head>
         <% include ../partial/common/head %>
+        <link rel='stylesheet' type='text/css' href='/static/lib/meduim-editor/css/medium-editor.css'>
+        <link rel='stylesheet' type='text/css' href='/static/lib/meduim-editor/css/themes/default.css'>
         <link rel='stylesheet' type='text/css' href='/static/css/write.css'>
     </head>
     <body>
         <div class='header-wrap'>
             <% include ../partial/common/header %>
         </div>
-        <form id =  "uploadForm"
-         enctype =  "multipart/form-data"
-         action  =  "/api/photo"
-         method  =  "post" >
-        <input type="file" id="file" name="files[]" multiple onchange="startRead()"/>
-        <div id="preview"></div>
-        <input type="submit" value="Upload Image" name="submit">
-        <script>
-        function startRead(evt) {
-            var file = document.getElementById('file').files[0];
-            if (file) {
-                if (file.type.match("image.*")) {
-                    getAsImage(file);
-                    alert("Name: " + file.name + "\n" + "Last Modified Date :" + file.lastModifiedDate);
-                }
-            }
-        }
-        function getAsImage(readFile) {
-            var reader = new FileReader();
-            reader.readAsDataURL(readFile);
-            reader.onload = addImg;
-        }
-        function addImg(imgsrc) {
-            var img = document.createElement('img');
-            img.setAttribute("src", imgsrc.target.result);
-            img.setAttribute("height","510");
-            img.setAttribute("width","510");
-            document.getElementById("preview").appendChild(img);
-        }
-	    </script>
-        <div class='footer-wrap'>
-            <% include ../partial/common/footer %>
+        <div class='content'>
+
+            <div class='editable' contenteditable='true'>
+                <p>
+                    asdasd
+                </p>
+                <p>
+                    1q23123
+                </p>
+            </div>
+
         </div>
+
+        <form id =  "uploadForm"
+        enctype =  "multipart/form-data"
+        action  =  "/api/photo"
+        method  =  "post" >
+            <input type="file" id="file" name="files[]" multiple onchange="startRead()"/>
+            <div id="preview"></div>
+            <input type="submit" value="Upload Image" name="submit">
+            <script>
+                function startRead(evt) {
+                    var file = document.getElementById('file').files[0];
+                    if (file) {
+                        if (file.type.match("image.*")) {
+                            getAsImage(file);
+                            alert("Name: " + file.name + "\n" + "Last Modified Date :" + file.lastModifiedDate);
+                        }
+                    }
+                }
+
+                function getAsImage(readFile) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(readFile);
+                    reader.onload = addImg;
+                }
+
+                function addImg(imgsrc) {
+                    var img = document.createElement('img');
+                    img.setAttribute("src", imgsrc.target.result);
+                    img.setAttribute("height", "510");
+                    img.setAttribute("width", "510");
+                    document.getElementById("preview").appendChild(img);
+                }
+            </script>
+            <div class='footer-wrap'>
+                <% include ../partial/common/footer %>
+            </div>
+            <script src='/static/lib/meduim-editor/js/medium-editor.js'></script>
+            <script>
+                $(document).ready(function() {
+                    var editor = new MediumEditor('.editable');
+                });
+            </script>
     </body>
 </html>
