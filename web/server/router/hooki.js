@@ -2,7 +2,7 @@ var router = require('express').Router();
 var cp = require('../modules/contentprovider');
 
 router.get('/', function(req, res) {
-    req.hookiProvider.findAll(10, function(err, hookis) {
+    req.contentProvider.getHookiListAll(10, function(err, hookis) {
         req.ejsData.hookis = hookis;
         cp.getTagList({
             limits : 100

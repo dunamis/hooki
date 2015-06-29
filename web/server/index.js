@@ -1,5 +1,5 @@
 var dbcon = require('./modules/dbconnector'),
-    hookiProvider = require("./modules/hookiprovider"),
+    cp = require('./modules/contentprovider'),
     express = require("express"),
     bodyParser = require("body-parser"),
     session = require("express-session"),
@@ -56,7 +56,7 @@ function addMiddleware(app) {
 
     // provider 및 ejs 공통 데이터 삽입을 위한  middleware
     app.use('/*', function(req, res, next) {
-        req.hookiProvider = hookiProvider;
+        req.contentProvider = cp;
         req.ejsData = {};
         req.ejsData.loginStatus = req.isAuthenticated();
         req.ejsData.email = req.login.email;

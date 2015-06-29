@@ -26,7 +26,7 @@ $(document).ready(function() {
 
                 for (var i in data) {
                     html = data[i].title;
-                    serial = data[i].serial;
+                    serial = data[i].sn;
                     html = html.replace(c, '<b>' + c + '</b>');
                     item = $('div.search-result ul.list .template').clone();
                     item.find('.link').attr('href', '/hooki/read/' + serial);

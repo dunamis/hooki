@@ -8,7 +8,7 @@ router.post('/search', function(req, res) {
             $regex : '.*' + c + '.*'
         }
     };
-    req.hookiProvider.findByCondition(condition, function(err, items) {
+    req.contentProvider.getHookiListByCondition(condition, function(err, items) {
         res.send(items);
     });
 });
