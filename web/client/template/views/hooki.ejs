@@ -15,9 +15,12 @@
                         <li class='item'>
                             <span class='thumb'><img src='/static/img/no_image_available.png'></span>
                             <span class='title'><a href='/hooki/read/<%=hooki.sn%>'><%= hooki.title %></a></span>
-                            <% hooki.tags.forEach(function(tag) { %>
+                            <%
+                            if(hooki.tags) {
+                            hooki.tags.forEach(function(tag) {
+                            %>
                             <span class='tag label label-info'><%= tag %></span>
-                            <% }); %>
+                            <% });} %>
                             <span class='nick' style='display:none'></span>
                             <span class='score' style='display:none'><%= hooki.score %></span>
                             <span class='etc' style='display:none'><%= hooki.date %><%= hooki.content %></span>
@@ -28,9 +31,13 @@
             </div>
             <div class='tag-block'>
                 <h3>태그 리스트</h3>
-                <% tags.forEach(function(tags) { %>
-                    <span class='tag label label-warning'><%= tags.tag%></span>
-                <% }); %>
+                <% if(tags) {
+                tags.forEach(function(tags) {
+                %>
+                <span class='tag label label-warning'><%= tags.tag%></span>
+                <%
+                });}
+                %>
             </div>
         </div>
         <div class='footer-wrap'>

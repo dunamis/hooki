@@ -1,5 +1,4 @@
 var dbcon = require('./modules/dbconnector'),
-    cp = require('./modules/contentprovider'),
     express = require("express"),
     bodyParser = require("body-parser"),
     session = require("express-session"),
@@ -43,7 +42,7 @@ function addMiddleware(app) {
     app.use(passport.session());
 
     // login을 위한 middleware
-    app.use(require('./middleware/login.js'));
+    app.use(require('./middleware/account.js'));
 
     // body parser middleware 사용
     app.use(bodyParser.json());
@@ -56,9 +55,8 @@ function addMiddleware(app) {
 
     // provider 및 ejs 공통 데이터 삽입을 위한  middleware
     app.use('/*', function(req, res, next) {
-        req.contentProvider = cp;
         req.ejsData = {};
-        req.ejsData.loginStatus = req.isAuthenticated();
+        req.ejsData.loginStatus = req.isAuthenticated() || req.login.loginStatus;
         req.ejsData.email = req.login.email;
         next();
     });
@@ -101,7 +99,7 @@ function addRouter(app) {
     app.use('/', require('./router/singlepages'));
     app.use('/hooki', require('./router/hooki'));
     app.use('/tags', require('./router/tags'));
-    app.use('/users',require('./router/users'));
+    app.use('/users', require('./router/users'));
     app.use('/request', require('./router/request'));
     app.use('/product', require('./router/product'));
     app.use('/account', require('./router/account'));

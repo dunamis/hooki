@@ -8,7 +8,7 @@ function getCollection(name, callback) {
         if (error)
             callback(error);
         else {
-            console.log("hooki COLLECTION: " + hookiCollection);
+            console.log("hooki COLLECTION: " + hookiCollection.toString());
             callback(null, hookiCollection);
         }
     });
@@ -81,9 +81,9 @@ exports.getHookiContent = function(option, callback) {
                 console.log(error, data);
                 if (error) {
                     console.log("failure!!");
-                    callback([]);
+                    callback(null);
                 } else {
-                    console.log("success!!");
+                    console.log("success!!", data);
                     callback(data);
                 }
             });
@@ -159,26 +159,105 @@ exports.addCommentToHooki = function(hookiId, comment, callback) {
     });
 };
 
-exports.moveDraftToHooki = function(option, callback) {
-    db.collection('hookiDraft', function(error, draftCollec) {
-        if (error)
-            callback(false);
-        draftCollec.findOne({}, function(error, data) {
-            if (error)
-                callback(false);
-
-            db.collection('hooki', function(error, hookiCollec) {
-                if (error)
-                    callback(false);
-
-                hookiCollec.insert(data, function(error, data) {
-                    callback(true);
-                });
+exports.getHookiDraft = function(args, callback) {
+    getCollection('hookiDraft', function(error, col) {
+        if (error) {
+            callback({
+                success : false,
+                msg : error
             });
+            return;
+        }
+
+        col.findOne({
+            'email' : args.email
+        }, function(error2, item) {
+            if (error2) {
+                callback({
+                    success : false,
+                    msg : error2
+                });
+                return;
+            }
+            item.success = true;
+            callback(item);
         });
     });
 };
 
-exports.upsertHookiDraft = function(option, data, callback) {
-
+exports.upsertHookiDraft = function(data, option, callback) {
+    getCollection('hookiDraft', function(error, col) {
+        if (error) {
+            callback(false);
+            return;
+        }
+        col.update({
+            'email' : data.email
+        }, data, {
+            upsert : true
+        }, function(error, data) {
+            if (error) {
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    });
 };
+
+exports.writeHooki = function(data, callback) {
+    getCollection('seq', function(error, seqCol) {
+        if (error) {
+            callback(null);
+            return;
+        }
+        seqCol.findAndModify({
+            '_id' : 'hooki'
+        }, {}, {
+            '$inc' : {
+                'seq' : 1
+            }
+        }, {
+            new : true
+        }, function(error1, seq) {
+            if (error1) {
+                callback(null);
+                return;
+            }
+            data.sn = seq.value.seq;
+            getCollection('hooki', function(error2, hookiCol) {
+                if (error2) {
+                    callback(null);
+                    return;
+                }
+                hookiCol.insert(data, {}, function(error3, hooki) {
+                    if (error3) {
+                        callback(null);
+                        return;
+                    }
+                    callback(data.sn);
+                });
+            });
+
+        })
+    });
+};
+
+exports.removeDraft = function(email, callback) {
+    getCollection('hookiDraft', function(error, col) {
+        if (error) {
+            callback(false);
+            return;
+        }
+        col.findAndRemove({
+            'email' : email
+        }, {}, function(error1, data) {
+            if (error1) {
+                callback(false);
+                return;
+            }
+            callback(true);
+        });
+    });
+}
+

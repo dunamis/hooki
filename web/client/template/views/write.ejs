@@ -11,58 +11,190 @@
             <% include ../partial/common/header %>
         </div>
         <div class='content'>
-
-            <div class='editable' contenteditable='true'>
-                <p>
-                    asdasd
-                </p>
-                <p>
-                    1q23123
-                </p>
+            <div class='lables'>
+                <div class='title'>
+                    제목
+                </div>
+                <div class='editable'>
+                    내용
+                </div>
+            </div>
+            <div class='write-form'>
+                <div class='draft' style='display:none;color:#CCC'>
+                    [[ Draft ]]
+                </div>
+                <div class='title' contenteditable='true'></div>
+                <div class='content' contenteditable='true'></div>
+                <button class='write-btn pull-right btn'>
+                    글 저장
+                </button>
+            </div>
+            <div class='toolbar'>
+                <button>
+                    add image
+                </button>
+                <button>
+                    add video
+                </button>
+                <button>
+                    add embed
+                </button>
+                <button>
+                    add link
+                </button>
             </div>
 
         </div>
 
-        <form id =  "uploadForm"
+        <!--form id =  "uploadForm"
         enctype =  "multipart/form-data"
         action  =  "/api/photo"
         method  =  "post" >
-            <input type="file" id="file" name="files[]" multiple onchange="startRead()"/>
-            <div id="preview"></div>
-            <input type="submit" value="Upload Image" name="submit">
-            <script>
-                function startRead(evt) {
-                    var file = document.getElementById('file').files[0];
-                    if (file) {
-                        if (file.type.match("image.*")) {
-                            getAsImage(file);
-                            alert("Name: " + file.name + "\n" + "Last Modified Date :" + file.lastModifiedDate);
-                        }
-                    }
-                }
+        <input type="file" id="file" name="files[]" multiple onchange="startRead()"/>
+        <div id="preview"></div>
+        <input type="submit" value="Upload Image" name="submit">
+        <script>
+        function startRead(evt) {
+        var file = document.getElementById('file').files[0];
+        if (file) {
+        if (file.type.match("image.*")) {
+        getAsImage(file);
+        alert("Name: " + file.name + "\n" + "Last Modified Date :" + file.lastModifiedDate);
+        }
+        }
+        }
 
-                function getAsImage(readFile) {
-                    var reader = new FileReader();
-                    reader.readAsDataURL(readFile);
-                    reader.onload = addImg;
-                }
+        function getAsImage(readFile) {
+        var reader = new FileReader();
+        reader.readAsDataURL(readFile);
+        reader.onload = addImg;
+        }
 
-                function addImg(imgsrc) {
-                    var img = document.createElement('img');
-                    img.setAttribute("src", imgsrc.target.result);
-                    img.setAttribute("height", "510");
-                    img.setAttribute("width", "510");
-                    document.getElementById("preview").appendChild(img);
-                }
-            </script>
-            <div class='footer-wrap'>
-                <% include ../partial/common/footer %>
-            </div>
-            <script src='/static/lib/meduim-editor/js/medium-editor.js'></script>
-            <script>
-                $(document).ready(function() {
-                    var editor = new MediumEditor('.editable');
+        function addImg(imgsrc) {
+        var img = document.createElement('img');
+        img.setAttribute("src", imgsrc.target.result);
+        img.setAttribute("height", "510");
+        img.setAttribute("width", "510");
+        document.getElementById("preview").appendChild(img);
+        }
+        </script-->
+        <div class='footer-wrap'>
+            <% include ../partial/common/footer %>
+        </div>
+        <script src='/static/lib/meduim-editor/js/medium-editor.js'></script>
+        <script>
+            var titleEditor;
+            var contentEditor;
+            $(document).ready(function() {
+                getHookiDraft();
+                setupEditables();
+                $('.write-form .write-btn').click(function() {
+                    saveHooki();
                 });
-            </script>
+            });
+
+            function setupEditables() {
+                titleEditor = new MediumEditor('.write-form .title', {
+                    placeholder : {
+                        text : '제목을 입력하세요.'
+                    }
+                });
+                contentEditor = new MediumEditor('.write-form .content', {
+                    placeholder : {
+                        text : '내용을 입력하세요.'
+                    }
+                });
+                titleEditor.subscribe('editableInput', function(event, editable) {
+                    $('.write-form .draft').show();
+                    saveHookiDraft();
+                    return event;
+                });
+
+                contentEditor.subscribe('editableInput', function(event, editable) {
+                    $('.write-form .draft').show();
+                    saveHookiDraft();
+                    return event;
+                });
+            }
+
+            function getHookiDraft() {
+                $.ajax({
+                    url : '/hooki/draft',
+                    method : 'GET',
+                    success : function(data) {
+                        if (data.success) {
+                            $('.write-form .draft').show();
+                            $('.write-form .title').html(data.title);
+                            $('.write-form .content').html(data.content);
+                            setupEditables();
+                        } else {
+                            console.log(data.msg);
+                        }
+                    },
+                    error : function() {
+                        console.log('server error.');
+                    }
+                });
+            }
+
+            function saveHookiDraft() {
+                var title = $('.write-form .title').text();
+                var content = $('.write-form .content').html();
+
+                if (!title && !content) {
+                    return;
+                }
+
+                $.ajax({
+                    url : '/hooki/draft',
+                    method : 'POST',
+                    cotentType : 'application/json',
+                    data : {
+                        'title' : title,
+                        'content' : content
+                    },
+                    success : function(data) {
+                        if (data.success) {
+                            console.log('save draft.');
+                        } else {
+                            console.log(data.msg);
+                        }
+                    },
+                    error : function() {
+                        console.log('server error.');
+                    }
+                });
+            }
+
+            function saveHooki() {
+                var title = $('.write-form .title').text();
+                var content = $('.write-form .content').html();
+
+                if (!title && !content) {
+                    return;
+                }
+
+                $.ajax({
+                    url : '/hooki/write',
+                    method : 'POST',
+                    cotentType : 'application/json',
+                    data : {
+                        'title' : title,
+                        'content' : content
+                    },
+                    success : function(data) {
+                        if (data.success) {
+                            console.log('save hooki.');
+                            window.location = '/hooki/read/' + data.sn;
+                        } else {
+                            console.log(data.msg);
+                        }
+                    },
+                    error : function() {
+                        console.log('server error.');
+                    }
+                });
+            }
+        </script>
     </body>
 </html>
