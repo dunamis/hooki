@@ -11,7 +11,14 @@ var FACEBOOK_APP_LIST = {
     'soopdop' : config.facebook.soopdop
 };
 
+var TWITTER_APP_LIST = {
+    'sang' : config.twitter.sang,
+    'ciogenis' : config.twitter.ciogenis,
+    'soopdop' : config.twitter.soopdop
+};
+
 var facebookConfig = FACEBOOK_APP_LIST[process.env['USER']];
+var twitterConfig = TWITTER_APP_LIST[process.env['USER']];
 
 passport.use(new FacebookStrategy({
         clientID: facebookConfig.app_id,
@@ -27,9 +34,9 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.use(new TwitterStrategy({
-        consumerKey: config.twitter.api_key,
-        consumerSecret: config.twitter.api_secret,
-        callbackURL: config.twitter.callback_url
+        consumerKey: twitterConfig.api_key,
+        consumerSecret: twitterConfig.api_secret,
+        callbackURL: twitterConfig.callback_url
     },
     function(token, tokenSecret, profile, done) {
         process.nextTick(function() {

@@ -17,7 +17,19 @@ exports.facebook = {
 };
 
 exports.twitter = {
-    "api_key" : "6YwL6HLYS98OAyyLkx3o3bfdn",
-    "api_secret" : "HIIVxi4tScEuUkVAGLvuoUXFDSSgOTcn4Ka8q02hVVhzKb97fz",
-    "callback_url" : "http://104.238.148.30:22222/auth/twitter/callback"
+    sang : {
+        "api_key" : "97ruuXnrIbE3rSGuRRBk50HbG",
+        "api_secret" : "AzdznMq1u7rOAKWvDBShIjKdLr1gl85lfQhzXqC2HWTbtics65",
+        "callback_url" : "http://104.238.148.30:11111/auth/twitter/callback"
+    },
+    ciogenis : {
+        "api_key" : "6YwL6HLYS98OAyyLkx3o3bfdn",
+        "api_secret" : "HIIVxi4tScEuUkVAGLvuoUXFDSSgOTcn4Ka8q02hVVhzKb97fz",
+        "callback_url" : "http://104.238.148.30:22222/auth/twitter/callback"
+    },
+    soopdop : {
+        "api_key" : "93lI8GV7CAP9fohDhmEDsouhB",
+        "api_secret" : "gh0i1phuJmpc9vsmbnryb41g0qZvTIizTzR5Hq2UY0V9GMsXTT",
+        "callback_url" : "http://104.238.148.30:33333/auth/twitter/callback"
+    }
 };
