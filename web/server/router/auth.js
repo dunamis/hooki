@@ -5,10 +5,18 @@ var TwitterStrategy = require('passport-twitter').Strategy;
 
 var config = require('../modules/accountconfig');
 
+var FACEBOOK_APP_LIST = {
+    'sang' : config.facebook.sang,
+    'ciogenis' : config.facebook.ciogenis,
+    'soopdop' : config.facebook.soopdop
+};
+
+var facebookConfig = FACEBOOK_APP_LIST[process.env['USER']];
+
 passport.use(new FacebookStrategy({
-        clientID: config.facebook.app_id,
-        clientSecret: config.facebook.app_secret,
-        callbackURL: config.facebook.callback_url
+        clientID: facebookConfig.app_id,
+        clientSecret: facebookConfig.app_secret,
+        callbackURL: facebookConfig.callback_url
     },
     function(accessToken, refreshToken, profile, done) {
         process.nextTick(function() {
