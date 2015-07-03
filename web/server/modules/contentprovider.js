@@ -1,6 +1,7 @@
 var dbConn = require('./dbconnector');
 var mongo = require('mongodb');
 var ObjectID = mongo.ObjectID;
+var async = require('async');
 
 function getCollection(name, callback) {
     console.log("[ContentProvider:getCollection] function called");
@@ -162,21 +163,15 @@ exports.addCommentToHooki = function(hookiId, comment, callback) {
 exports.getHookiDraft = function(args, callback) {
     getCollection('hookiDraft', function(error, col) {
         if (error) {
-            callback({
-                success : false,
-                msg : error
-            });
+            callback(false);
             return;
         }
 
         col.findOne({
             'email' : args.email
         }, function(error2, item) {
-            if (error2) {
-                callback({
-                    success : false,
-                    msg : error2
-                });
+            if (error2 || !item) {
+                callback(false);
                 return;
             }
             item.success = true;
@@ -205,13 +200,19 @@ exports.upsertHookiDraft = function(data, option, callback) {
     });
 };
 
-exports.writeHooki = function(data, callback) {
-    getCollection('seq', function(error, seqCol) {
-        if (error) {
-            callback(null);
-            return;
-        }
-        seqCol.findAndModify({
+exports.writeHooki = function(hookiContent, callback) {
+    async.waterfall([
+    function getSeqCollection(next) {
+        getCollection('seq', function(error, seqCollection) {
+            if (error) {
+                next(error);
+                return;
+            }
+            next(null, seqCollection);
+        });
+    },
+    function getSeqNumber(seqCollection, next) {
+        seqCollection.findAndModify({
             '_id' : 'hooki'
         }, {}, {
             '$inc' : {
@@ -219,45 +220,62 @@ exports.writeHooki = function(data, callback) {
             }
         }, {
             new : true
-        }, function(error1, seq) {
-            if (error1) {
-                callback(null);
+        }, function(error, doc) {
+            if (error) {
+                next(error);
                 return;
             }
-            data.sn = seq.value.seq;
-            getCollection('hooki', function(error2, hookiCol) {
-                if (error2) {
-                    callback(null);
-                    return;
-                }
-                hookiCol.insert(data, {}, function(error3, hooki) {
-                    if (error3) {
-                        callback(null);
-                        return;
-                    }
-                    callback(data.sn);
-                });
+            next(null, doc.value.seq);
+        });
+    },
+    function getHookiCollection(seqNum, next) {
+        getCollection('hooki', function(error, hookiCollection) {
+            if (error) {
+                next(error);
+                return;
+            }
+            next(null, {
+                hookiCollection : hookiCollection,
+                seqNum : seqNum
             });
+        });
 
-        })
+    },
+    function insertHooki(args, next) {
+        hookiContent.sn = args.seqNum;
+        var hookiCollection = args.hookiCollection;
+
+        hookiCollection.insert(hookiContent, {}, function(error, doc) {
+            if (error) {
+                next(error);
+                return;
+            }
+            next(null, hookiContent.sn);
+        });
+    }], function end(error, result) {
+        if (error) {
+            console.log('writeHooki 실행 중 에러.');
+            callback(error);
+        } else {
+            callback(null, result);
+        }
     });
 };
 
 exports.removeDraft = function(email, callback) {
     getCollection('hookiDraft', function(error, col) {
         if (error) {
-            callback(false);
+            callback(error);
             return;
         }
         col.findAndRemove({
             'email' : email
-        }, {}, function(error1, data) {
-            if (error1) {
-                callback(false);
+        }, {}, function(error, data) {
+            if (error) {
+                callback(error);
                 return;
             }
-            callback(true);
+            callback(null);
         });
     });
 }
-

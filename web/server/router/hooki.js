@@ -1,5 +1,6 @@
 var router = require('express').Router();
 var cp = require('../modules/contentprovider');
+var async = require('async');
 
 router.get('/', function(req, res) {
     cp.getHookiListAll(100, function(err, hookis) {
@@ -38,25 +39,43 @@ router.get('/write', function(req, res) {
 });
 
 router.post('/write', function(req, res) {
-    var title = req.body.title;
-    var content = req.body.content;
-    cp.writeHooki({
-        'email' : req.login.email,
-        'title' : title,
-        'content' : content,
-        'date' : new Date()
-    }, function(sn) {
-        if (sn) {
-            cp.removeDraft(req.login.email, function(result) {
-                res.send({
-                    success : true,
-                    sn : sn
-                });
+    var title = req.body.title,
+        content = req.body.content,
+        email = req.login.email;
+
+    async.waterfall([
+    function writeHooki(next) {
+        cp.writeHooki({
+            'email' : email,
+            'title' : title,
+            'content' : content,
+            'date' : new Date()
+        }, function(error, seqNum) {
+            if (error) {
+                next(error);
+            } else {
+                next(null, seqNum);
+            }
+        });
+    },
+    function removeDraft(seqNum, next) {
+        cp.removeDraft(email, function(error) {
+            if (error) {
+                next(error);
+            } else {
+                next(null, seqNum);
+            }
+        });
+    }], function end(error, seqNum) {
+        if (error) {
+            res.send({
+                succes : false,
+                msg : error.toString()
             });
         } else {
             res.send({
-                success : false,
-                msg : '에러메시지'
+                success : true,
+                sn : seqNum
             });
         }
     });
