@@ -2,8 +2,8 @@
 <html>
     <head>
         <% include ../partial/common/head %>
-        <link rel='stylesheet' type='text/css' href='/static/lib/meduim-editor/css/medium-editor.css'>
-        <link rel='stylesheet' type='text/css' href='/static/lib/meduim-editor/css/themes/default.css'>
+        <link rel='stylesheet' type='text/css' href='/static/plugins/meduim-editor/css/medium-editor.css'>
+        <link rel='stylesheet' type='text/css' href='/static/plugins/meduim-editor/css/themes/default.css'>
         <link rel='stylesheet' type='text/css' href='/static/css/write.css'>
     </head>
     <body>
@@ -81,7 +81,8 @@
         <div class='footer-wrap'>
             <% include ../partial/common/footer %>
         </div>
-        <script src='/static/lib/meduim-editor/js/medium-editor.js'></script>
+        <% include ../partial/common/scripts %>
+        <script src='/static/plugins/meduim-editor/js/medium-editor.js'></script>
         <script>
             var titleEditor;
             var contentEditor;

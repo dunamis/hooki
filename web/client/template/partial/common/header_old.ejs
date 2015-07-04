@@ -1,0 +1,52 @@
+<div class='top-bar'>
+    <div class='logo'>
+        <a href='/'>후기</a>
+    </div>
+    <ul class='tab-list'>
+        <%
+        subMenuSelected = [];
+        if(typeof submenu !== 'undefined') {
+        subMenuSelected[submenu] = 'selected';
+        }
+        %>
+        <li class='<%=subMenuSelected['hooki'] || ""%>'>
+            <a href='/hooki'>후기</a>
+        </li>
+        <li class='<%=subMenuSelected['tags'] || ""%>'>
+            <a href='/tags'>태그</a>
+        </li>
+        <li class='<%=subMenuSelected['users'] || ""%>'>
+            <a href='/users'>사용자</a>
+        </li>
+        <li class='<%=subMenuSelected['request'] || ""%>'>
+            <a href='/request'>리뷰 요청</a>
+        </li>
+        <li class='<%=subMenuSelected['product'] || ""%>'>
+            <a href='/product'>제품</a>
+        </li>
+    </ul>
+    <div class='menu-set'>
+        <div class='search-block'>
+            <i class='glyphicon glyphicon-search'></i>
+            <input type="search" class="form-control" placeholder="후기 검색" name='search-keyword'>
+            </input>
+            <div class='search-result'>
+                <ul class='list'>
+                    <li class='template hidden'>
+                        <a class='link' href=#''><img class='image' src="/static/img/no_image_available.png"> <span class='text'></span></a>
+                    </li>
+                </ul>
+                <span class='no-result hidden'>결과 없음.</span>
+
+            </div>
+        </div>
+        <%if (loginStatus) { %>
+        <a class="round-btn write-btn" href="/hooki/write"> 후기 작성 </a>
+        <a class="round-btn login-btn" href="/account/logout"> 로그아웃 </a>
+        <span>이름 : <%=email %></span>
+        <%} else { %>
+        <a class="round-btn login-btn" href="/account/login"> 로그인 </a>
+        <%} %>
+    </div>
+</div>
+</div>

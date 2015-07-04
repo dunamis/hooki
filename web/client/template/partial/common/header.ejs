@@ -1,52 +1,254 @@
-<div class='top-bar'>
-    <div class='logo'>
-        <a href='/'>후기</a>
-    </div>
-    <ul class='tab-list'>
-        <%
-        subMenuSelected = [];
-        if(typeof submenu !== 'undefined') {
-        subMenuSelected[submenu] = 'selected';
-        }
-        %>
-        <li class='<%=subMenuSelected['hooki'] || ""%>'>
-            <a href='/hooki'>후기</a>
-        </li>
-        <li class='<%=subMenuSelected['tags'] || ""%>'>
-            <a href='/tags'>태그</a>
-        </li>
-        <li class='<%=subMenuSelected['users'] || ""%>'>
-            <a href='/users'>사용자</a>
-        </li>
-        <li class='<%=subMenuSelected['request'] || ""%>'>
-            <a href='/request'>리뷰 요청</a>
-        </li>
-        <li class='<%=subMenuSelected['product'] || ""%>'>
-            <a href='/product'>제품</a>
-        </li>
-    </ul>
-    <div class='menu-set'>
-        <div class='search-block'>
-            <i class='glyphicon glyphicon-search'></i>
-            <input type="search" class="form-control" placeholder="후기 검색" name='search-keyword'>
-            </input>
-            <div class='search-result'>
-                <ul class='list'>
-                    <li class='template hidden'>
-                        <a class='link' href=#''><img class='image' src="/static/img/no_image_available.png"> <span class='text'></span></a>
-                    </li>
-                </ul>
-                <span class='no-result hidden'>결과 없음.</span>
+<%
+subMenuSelected = [];
+if(typeof submenu !== 'undefined') {
+subMenuSelected[submenu] = 'active';
+}
+%>
 
+<!-- header-container start -->
+<div class="header-container">
+
+    <!-- header-top start -->
+    <!-- classes:  -->
+    <!-- "dark": dark version of header top e.g. class="header-top dark" -->
+    <!-- "colored": colored version of header top e.g. class="header-top colored" -->
+    <!-- ================ -->
+    <div class="header-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-3 col-sm-6 col-md-9">
+                    <!-- header-top-first start -->
+                    <!-- ================ -->
+                    <div class="header-top-first clearfix">
+                        <ul class="social-links circle small clearfix hidden-xs">
+                            <li class="twitter">
+                                <a target="_blank" href="http://www.twitter.com"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li class="googleplus">
+                                <a target="_blank" href="http://plus.google.com"><i class="fa fa-google-plus"></i></a>
+                            </li>
+                            <li class="facebook">
+                                <a target="_blank" href="http://www.facebook.com"><i class="fa fa-facebook"></i></a>
+                            </li>
+                        </ul>
+                        <div class="social-links hidden-lg hidden-md hidden-sm circle small">
+                            <div class="btn-group dropdown">
+                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-share-alt"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-animation">
+                                    <li class="twitter">
+                                        <a target="_blank" href="http://www.twitter.com"><i class="fa fa-twitter"></i></a>
+                                    </li>
+                                    <li class="googleplus">
+                                        <a target="_blank" href="http://plus.google.com"><i class="fa fa-google-plus"></i></a>
+                                    </li>
+                                    <li class="facebook">
+                                        <a target="_blank" href="http://www.facebook.com"><i class="fa fa-facebook"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- header-top-first end -->
+                </div>
+                <div class="col-xs-9 col-sm-6 col-md-3">
+
+                    <!-- header-top-second start -->
+                    <!-- ================ -->
+                    <div id="header-top-second"  class="clearfix">
+
+                        <!-- header top dropdowns start -->
+                        <!-- ================ -->
+                        <div class="header-top-dropdown text-right">
+                            <!--div class="btn-group">
+                            <a href="page-signup.html" class="btn btn-default btn-sm"><i class="fa fa-user pr-10"></i> Sign Up</a>
+                            </div-->
+                            <%if (!loginStatus) { %>
+                            <div class="btn-group dropdown">
+                                <button type="button" class="btn dropdown-toggle btn-default btn-sm" data-toggle="dropdown">
+                                    <i class="fa fa-lock pr-10"></i> Login
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right dropdown-animation">
+                                    <li>
+                                        <form class="login-form margin-clear">
+                                            <div class="form-group has-feedback">
+                                                <label class="control-label">Username</label>
+                                                <input type="text" class="form-control email" placeholder="email (a@mail.com)">
+                                                <i class="fa fa-user form-control-feedback"></i>
+                                            </div>
+                                            <div class="form-group has-feedback">
+                                                <label class="control-label">Password</label>
+                                                <input type="password" class="form-control pwd" placeholder="password">
+                                                <i class="fa fa-lock form-control-feedback"></i>
+                                            </div>
+                                            <div class='login-fail-msg'></div>
+                                            <button type="submit" class="btn btn-gray btn-sm">
+                                                Log In
+                                            </button>
+                                            <span class="pl-5 pr-5">or</span>
+                                            <button type="button" class="btn btn-default btn-sm">
+                                                Sing Up
+                                            </button>
+                                            <ul>
+                                                <li>
+                                                    <a href="#">Forgot your password?</a>
+                                                </li>
+                                            </ul>
+                                            <span class="text-center">Login with</span>
+                                            <ul class="social-links circle small colored clearfix">
+                                                <li class="facebook">
+                                                    <a target="_blank" href="/auth/facebook"><i class="fa fa-facebook"></i></a>
+                                                </li>
+                                                <li class="twitter">
+                                                    <a target="_blank" href="/auth/twitter"><i class="fa fa-twitter"></i></a>
+                                                </li>
+                                                <!--li class="googleplus">
+                                                <a target="_blank" href="/auth/googleplus"><i class="fa fa-google-plus"></i></a>
+                                                </li-->
+                                            </ul>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                            <%} else {%>
+                            <a type="button" class="btn dropdown-toggle btn-danger btn-sm" href='/auth/logout'> <i class="fa fa-lock pr-10"></i> Logout </a>
+                            <span>이름 : <%=displayName %></span>
+                            <%}%>
+                        </div>
+                        <!--  header top dropdowns end -->
+                    </div>
+                    <!-- header-top-second end -->
+                </div>
             </div>
         </div>
-        <%if (loginStatus) { %>
-        <a class="round-btn write-btn" href="/hooki/write"> 후기 작성 </a>
-        <a class="round-btn login-btn" href="/account/logout"> 로그아웃 </a>
-        <span>이름 : <%=displayName %></span>
-        <%} else { %>
-        <a class="round-btn login-btn" href="/account/login"> 로그인 </a>
-        <%} %>
     </div>
+    <!-- header-top end -->
+
+    <!-- header start -->
+    <!-- classes:  -->
+    <!-- "fixed": enables fixed navigation mode (sticky menu) e.g. class="header fixed clearfix" -->
+    <!-- "dark": dark version of header e.g. class="header dark clearfix" -->
+    <!-- "full-width": mandatory class for the full-width menu layout -->
+    <!-- "centered": mandatory class for the centered logo layout -->
+    <!-- ================ -->
+    <header class="header  fixed   clearfix">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <!-- header-left start -->
+                    <!-- ================ -->
+                    <div class="header-left clearfix">
+                        <a class="navbar-brand" href="/" style='  margin: 0px 0;  padding: 0px;  overflow: hidden;  width: 315px;  height: 60px;'> <img src="/static/images/thumbs-up-icon.png" height="55" width="55" style='float: left; margin: 0 6px 0 0; '> <span class="logo_title" style=' font-size: 26px;  font-weight: 300;  display: block;  padding: 0;  line-height: 42px;color: #777777;  text-shadow: 1px 1px 0px #ffffff;'>{올}<strong>리뷰</strong></span> <span class="logo_subtitle" style=' margin-top:-5px; font-size: 11px;  font-weight: 300;  display: block;color: #777777;  text-shadow: 1px 1px 0px #ffffff;'>모두를 위한 모든 후기</span> </a>
+                    </div>
+                    <!-- header-left end -->
+
+                </div>
+                <div class="col-md-9">
+
+                    <!-- header-right start -->
+                    <!-- ================ -->
+                    <div class="header-right clearfix">
+
+                        <!-- main-navigation start -->
+                        <!-- classes: -->
+                        <!-- "onclick": Makes the dropdowns open on click, this the default bootstrap behavior e.g. class="main-navigation onclick" -->
+                        <!-- "animated": Enables animations on dropdowns opening e.g. class="main-navigation animated" -->
+                        <!-- "with-dropdown-buttons": Mandatory class that adds extra space, to the main navigation, for the search and cart dropdowns -->
+                        <!-- ================ -->
+                        <div class="main-navigation  animated with-dropdown-buttons">
+
+                            <!-- navbar start -->
+                            <!-- ================ -->
+                            <nav class="navbar navbar-default" role="navigation">
+                                <div class="container-fluid">
+
+                                    <!-- Toggle get grouped for better mobile display -->
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                                            <span class="sr-only">Toggle navigation</span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+
+                                    </div>
+
+                                    <!-- Collect the nav links, forms, and other content for toggling -->
+                                    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                                        <!-- main-menu -->
+                                        <ul class="nav navbar-nav ">
+                                            <li>
+                                                <a href="/">Home</a>
+                                            </li>
+                                            <li class='<%=subMenuSelected['hooki'] || ""%>'>
+                                                <a href='/hooki'>후기</a>
+                                            </li>
+                                            <li class='<%=subMenuSelected['tags'] || ""%>'>
+                                                <a href='/tags'>태그</a>
+                                            </li>
+                                            <li class='<%=subMenuSelected['users'] || ""%>'>
+                                                <a href='/users'>사용자</a>
+                                            </li>
+                                            <li class='<%=subMenuSelected['request'] || ""%>'>
+                                                <a href='/request'>리뷰 요청</a>
+                                            </li>
+                                            <li class='<%=subMenuSelected['product'] || ""%>'>
+                                                <a href='/product'>제품</a>
+                                            </li>
+                                        </ul>
+                                        <!-- main-menu end -->
+
+                                        <!-- header dropdown buttons -->
+                                        <div class="header-dropdown-buttons hidden-xs ">
+                                            <% if(loginStatus) {%>
+                                            <a href='/hooki/write' style='margin-right:20px'><i class="icon-pencil"></i>후기 작성 </a>
+                                            <%  }%>
+
+                                            <div class="btn-group dropdown">
+                                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="icon-search"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-right dropdown-animation">
+                                                    <li>
+                                                        <form role="search" class="search-box margin-clear">
+                                                            <div class="form-group has-feedback">
+                                                                <input type="text" class="form-control" placeholder="Search">
+                                                                <i class="icon-search form-control-feedback"></i>
+                                                            </div>
+                                                        </form>
+                                                    </li>
+                                                    <div class='search-result'>
+                                                        <ul class='list'>
+                                                            <li class='template hidden'>
+                                                                <a class='link' href=#''><img class='image' src="/static/images/no_image_available.png"> <span class='text'></span></a>
+                                                            </li>
+                                                        </ul>
+                                                        <span class='no-result hidden'>결과 없음.</span>
+
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- header dropdown buttons end-->
+
+                                    </div>
+
+                                </div>
+                            </nav>
+                            <!-- navbar end -->
+
+                        </div>
+                        <!-- main-navigation end -->
+                    </div>
+                    <!-- header-right end -->
+
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header end -->
 </div>
-</div>
+<!-- header-container end -->

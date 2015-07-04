@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('input[name=search-keyword]').keyup(function() {
+    $('.header .search-box input').keyup(function() {
         var c = $(this).val();
 
         if (c === '') {
@@ -43,4 +43,37 @@ $(document).ready(function() {
             }
         });
     });
+
+    $(document).ready(function() {
+        $('.login-form').submit(function(event) {
+            var email = $('.login-form input.email').val();
+            var password = $('.login-form input.pwd').val();
+
+            if (!email || !password) {
+                $('.login-form .login-fail-msg').text('아이디 / 패스워드를 입력하세요');
+                return false;
+            }
+
+            $.ajax({
+                url : '/auth/login',
+                method : 'POST',
+                data : {
+                    email : email,
+                    password : password
+                },
+                success : function(data) {
+                    if (data.success) {
+                        window.location = '/';
+                    } else {
+                        $('.login-form .login-fail-msg').text(data.msg);
+                    }
+                },
+                error : function() {
+                }
+            });
+
+            event.preventDefault();
+        });
+    });
+
 });

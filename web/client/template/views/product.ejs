@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <% include ../partial/common/head %>
-    </head>
-    <body>
-        <div class='header-wrap'>
+    <% include ../partial/common/head %>
+    <body class="no-trans">
+        <!-- scrollToTop -->
+        <!-- ================ -->
+        <div class="scrollToTop circle">
+            <i class="icon-up-open-big"></i>
+        </div>
+
+        <!-- page wrapper start -->
+        <!-- ================ -->
+        <div class="page-wrapper">
             <% include ../partial/common/header %>
-        </div>
-        <div class='content'>
-            product
-        </div>
-        <div class='footer-wrap'>
+
+
             <% include ../partial/common/footer %>
         </div>
+        <!-- page-wrapper end -->
+        <% include ../partial/common/scripts %>
     </body>
 </html>

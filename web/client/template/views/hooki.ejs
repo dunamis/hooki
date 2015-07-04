@@ -1,47 +1,54 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <% include ../partial/common/head %>
-    </head>
-    <body>
-        <div class='header-wrap'>
+    <% include ../partial/common/head %>
+    <body class="no-trans">
+        <!-- scrollToTop -->
+        <!-- ================ -->
+        <div class="scrollToTop circle">
+            <i class="icon-up-open-big"></i>
+        </div>
+
+        <!-- page wrapper start -->
+        <!-- ================ -->
+        <div class="page-wrapper">
             <% include ../partial/common/header %>
-        </div>
-        <div class='content'>
-            <div class='hooki-wrap'>
-                <div class='hooki-block'>
-                    <ul class='list'>
-                        <% hookis.forEach(function(hooki) { %>
-                        <li class='item'>
-                            <span class='thumb'><img src='/static/img/no_image_available.png'></span>
-                            <span class='title'><a href='/hooki/read/<%=hooki.sn%>'><%= hooki.title %></a></span>
-                            <%
-                            if(hooki.tags) {
-                            hooki.tags.forEach(function(tag) {
-                            %>
-                            <span class='tag label label-info'><%= tag %></span>
-                            <% });} %>
-                            <span class='nick' style='display:none'></span>
-                            <span class='score' style='display:none'><%= hooki.score %></span>
-                            <span class='etc' style='display:none'><%= hooki.date %><%= hooki.content %></span>
-                        </li>
-                        <% }); %>
-                    </ul>
+
+            <div class='content'>
+                <div class='hooki-wrap'>
+                    <div class='hooki-block'>
+                        <ul class='list'>
+                            <% hookis.forEach(function(hooki) { %>
+                            <li class='item'>
+                                <span class='thumb'><img src='/static/images/no_image_available.png'></span>
+                                <span class='title'><a href='/hooki/read/<%=hooki.sn%>'><%= hooki.title %></a></span>
+                                <%
+                                if(hooki.tags) {
+                                hooki.tags.forEach(function(tag) {
+                                %>
+                                <span class='tag label label-info'><%= tag %></span>
+                                <% });} %>
+                                <span class='nick' style='display:none'></span>
+                                <span class='score' style='display:none'><%= hooki.score %></span>
+                                <span class='etc' style='display:none'><%= hooki.date %><%= hooki.content %></span>
+                            </li>
+                            <% }); %>
+                        </ul>
+                    </div>
                 </div>
+                <!--div class='tag-block'>
+                    <h3>태그 리스트</h3>
+                    <% if(tags) {
+                    tags.forEach(function(tags) {
+                    %>
+                    <span class='tag label label-warning'><%= tags.tag%></span>
+                    <%
+                    });}
+                    %>
+                </div-->
             </div>
-            <div class='tag-block'>
-                <h3>태그 리스트</h3>
-                <% if(tags) {
-                tags.forEach(function(tags) {
-                %>
-                <span class='tag label label-warning'><%= tags.tag%></span>
-                <%
-                });}
-                %>
-            </div>
-        </div>
-        <div class='footer-wrap'>
             <% include ../partial/common/footer %>
         </div>
+        <!-- page-wrapper end -->
+        <% include ../partial/common/scripts %>
     </body>
 </html>

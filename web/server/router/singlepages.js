@@ -7,7 +7,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/favicon.ico', function(req, res) {
-    res.sendFile(path.join(__dirname, '../../client/static/img/favicon.ico'), {
+    res.sendFile(path.join(__dirname, '../../client/static/images/favicon.ico'), {
         headers : {
             "Content-Type" : "image/x-icon"
         }

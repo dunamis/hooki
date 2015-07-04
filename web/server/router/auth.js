@@ -22,48 +22,46 @@ var facebookConfig = FACEBOOK_APP_LIST[process.env['USER']];
 var twitterConfig = TWITTER_APP_LIST[process.env['USER']];
 
 passport.use(new FacebookStrategy({
-        clientID: facebookConfig.app_id,
-        clientSecret: facebookConfig.app_secret,
-        callbackURL: facebookConfig.callback_url
-    },
-    function(accessToken, refreshToken, profile, done) {
-        process.nextTick(function() {
-            console.log("facebook login");
-            return done(null, profile);
-        });
-    }
-));
+    clientID : facebookConfig.app_id,
+    clientSecret : facebookConfig.app_secret,
+    callbackURL : facebookConfig.callback_url
+}, function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function() {
+        console.log("facebook login");
+        return done(null, profile);
+    });
+}));
 
 passport.use(new TwitterStrategy({
-        consumerKey: twitterConfig.api_key,
-        consumerSecret: twitterConfig.api_secret,
-        callbackURL: twitterConfig.callback_url
-    },
-    function(token, tokenSecret, profile, done) {
-        process.nextTick(function() {
-            console.log("twitter login");
-            return done(null, profile);
+    consumerKey : twitterConfig.api_key,
+    consumerSecret : twitterConfig.api_secret,
+    callbackURL : twitterConfig.callback_url
+}, function(token, tokenSecret, profile, done) {
+    process.nextTick(function() {
+        console.log("twitter login");
+        return done(null, profile);
+    });
+}));
+
+passport.use(new LocalStrategy({
+    usernameField : 'email',
+    passwordField : 'password'
+}, function verify(email, password, done) {
+    var user = {
+        email : email,
+        password : password
+    };
+    if (email === "a@mail.com" || email === "b@mail.com") {
+        console.log(user);
+        user.displayName = email;
+        return done(null, user);
+    } else {
+        console.log("babo!!");
+        return done(null, false, {
+            message : 'incorrect email address'
         });
     }
-));
-
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-        var user = {
-            username : username,
-            password : password
-        };
-        if (username === "a@mail.com" || username === "b@mail.com") {
-            console.log(user);
-            user.displayName = username;
-            return done(null, user);
-        }
-        else {
-            console.log("babo!!");
-            return done(null, false, {message: 'incorrect email address'});
-        }
-    }
-));
+}));
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -76,32 +74,40 @@ passport.deserializeUser(function(obj, done) {
 router.get('/facebook', passport.authenticate('facebook'));
 
 router.get('/facebook/callback', passport.authenticate('facebook', {
-        successRedirect: '/',
-        failureRedirect: '/account/login'
-    }),
-    function(req, res) {
-        res.redirect('/');
-    }
-);
+    successRedirect : '/',
+    failureRedirect : '/account/login'
+}), function(req, res) {
+    res.redirect('/');
+});
 
 router.get('/twitter', passport.authenticate('twitter'));
 
 router.get('/twitter/callback', passport.authenticate('twitter', {
-        failureRedirect: '/account/login'
-    }),
-    function(req, res) {
-        res.redirect('/');
-    }
-);
+    failureRedirect : '/account/login'
+}), function(req, res) {
+    res.redirect('/');
+});
 
-router.post('/login', passport.authenticate('local', {
-        failureRedirect: '/account/login'
-    }),
-    function(req, res) {
-        console.log("local login success");
-        res.redirect('/');
+router.post('/login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+    if (err) {
+    return next(err);
     }
-);
+    if (!user) {
+    return res.send({success:false, msg : info.message});
+    }
+    req.logIn(user, function(err) {
+    if (err) { return next(err); }
+    return res.send({success:true});
+    });
+    })(req, res, next);
+});
+
+router.get('/logout', function(req, res) {
+    console.log(req.user.displayName + ' logout');
+    req.session.destroy();
+    res.redirect('/');
+});
 
 router.get('/failure', function(req, res) {
     console.log(req.isAuthenticated());
