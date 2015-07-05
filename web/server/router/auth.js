@@ -2,6 +2,7 @@ var router = require('express').Router();
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy = require('passport-twitter').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
 
 var config = require('../modules/accountconfig');
 
@@ -46,6 +47,23 @@ passport.use(new TwitterStrategy({
     }
 ));
 
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        var user = {
+            username : username,
+            password : password
+        };
+        if (username === "a@mail.com" || username === "b@mail.com") {
+            console.log(user);
+            return done(null, user);
+        }
+        else {
+            console.log("babo!!");
+            return done(null, false, {message: 'incorrect email address'});
+        }
+    }
+));
+
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
@@ -71,6 +89,15 @@ router.get('/twitter/callback', passport.authenticate('twitter', {
         failureRedirect: '/account/login'
     }),
     function(req, res) {
+        res.redirect('/');
+    }
+);
+
+router.post('/login', passport.authenticate('local', {
+        failureRedirect: '/account/login'
+    }),
+    function(req, res) {
+        console.log("local login success");
         res.redirect('/');
     }
 );
