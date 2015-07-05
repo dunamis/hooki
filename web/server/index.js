@@ -58,6 +58,11 @@ function addMiddleware(app) {
         req.ejsData = {};
         req.ejsData.loginStatus = req.isAuthenticated();
         req.ejsData.email = req.login.email;
+
+        if (req.user) {
+            req.ejsData.displayName = req.user.displayName;
+        }
+
         next();
     });
 

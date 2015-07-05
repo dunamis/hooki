@@ -55,6 +55,7 @@ passport.use(new LocalStrategy(
         };
         if (username === "a@mail.com" || username === "b@mail.com") {
             console.log(user);
+            user.displayName = username;
             return done(null, user);
         }
         else {
