@@ -4,12 +4,12 @@ var ObjectID = mongo.ObjectID;
 var async = require('async');
 
 function getCollection(name, callback) {
-    console.log("[ContentProvider:getCollection] function called");
+    console.log("[ContentProvider:getCollection] function called: ");
     var collection = dbConn.getDb().collection(name, function(error, hookiCollection) {
         if (error)
             callback(error);
         else {
-            console.log("hooki COLLECTION: " + hookiCollection.toString());
+            console.log(name + "COLLECTION: " + hookiCollection.toString());
             callback(null, hookiCollection);
         }
     });
@@ -87,6 +87,44 @@ exports.getHookiContent = function(option, callback) {
                     console.log("success!!", data);
                     callback(data);
                 }
+            });
+        }
+    });
+};
+
+exports.removeHooki = function(option, callback) {
+    var sn = option.sn || null;
+    getCollection('hooki', function(error, collection) {
+        if (error)
+            callback(error);
+        else {
+            collection.remove({
+                'sn' : sn
+            });
+        }
+    });
+};
+
+exports.updateHooki = function(option, callback) {
+    var sn = option.sn || null;
+    getCollection('hooki', function(error, collection) {
+        if (error)
+            callback(error);
+        else {
+            collection.update({
+                'sn' : sn
+            }, {
+                $set: {
+                    title : option.title,
+                    score : option.score,
+                    tag : option.tag,
+                    content : option.content,
+                }
+            }, function(error, hooki) {
+                if (error)
+                    callback(error);
+                else
+                    callback(null, hooki);
             });
         }
     });
