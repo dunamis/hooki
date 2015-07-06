@@ -71,13 +71,14 @@ exports.getHookiListByCondition = function(condition, callback) {
 };
 
 exports.getHookiContent = function(option, callback) {
-    var sn = option.sn || null;
+    if (option.sn === null)
+        return;
     getCollection('hooki', function(error, collection) {
         if (error)
             callback(error);
         else {
             collection.findOne({
-                'sn' : sn
+                'sn' : option.sn
             }, function(error, data) {
                 console.log(error, data);
                 if (error) {
@@ -93,26 +94,33 @@ exports.getHookiContent = function(option, callback) {
 };
 
 exports.removeHooki = function(option, callback) {
-    var sn = option.sn || null;
+    if (option.sn === null)
+        return;
     getCollection('hooki', function(error, collection) {
         if (error)
             callback(error);
         else {
             collection.remove({
-                'sn' : sn
+                'sn' : option.sn
+            }, function(error, item) {
+                if (error)
+                    callback(error);
+                else
+                    callback(null, item);
             });
         }
     });
 };
 
 exports.updateHooki = function(option, callback) {
-    var sn = option.sn || null;
+    if (option.sn === null)
+        return;
     getCollection('hooki', function(error, collection) {
         if (error)
             callback(error);
         else {
             collection.update({
-                'sn' : sn
+                'sn' : option.sn
             }, {
                 $set: {
                     title : option.title,
