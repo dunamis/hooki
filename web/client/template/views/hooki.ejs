@@ -12,43 +12,135 @@
         <!-- ================ -->
         <div class="page-wrapper">
             <% include ../partial/common/header %>
+            <!-- main-container start -->
+            <!-- ================ -->
+            <section class="main-container">
 
-            <div class='content'>
-                <div class='hooki-wrap'>
-                    <div class='hooki-block'>
-                        <ul class='list'>
+                <div class="container">
+                    <div class="row">
+
+                        <!-- main start -->
+                        <!-- ================ -->
+                        <div class="main col-md-12">
+
+                            <!-- page-title start -->
+                            <!-- ================ -->
+                            <h1 class="page-title">HOOKI LIST</h1>
+                            <div class="separator-2"></div>
+                            <!-- page-title end -->
+
                             <% hookis.forEach(function(hooki) { %>
-                            <li class='item'>
-                                <span class='thumb'><img src='/static/images/no_image_available.png'></span>
-                                <span class='title'><a href='/hooki/read/<%=hooki.sn%>'><%= hooki.title %></a></span>
-                                <%
-                                if(hooki.tags) {
-                                hooki.tags.forEach(function(tag) {
-                                %>
-                                <span class='tag label label-info'><%= tag %></span>
-                                <% });} %>
-                                <span class='nick' style='display:none'></span>
-                                <span class='score' style='display:none'><%= hooki.score %></span>
-                                <span class='etc' style='display:none'><%= hooki.date %><%= hooki.content %></span>
-                            </li>
+                            <!-- blogpost start -->
+                            <article class="blogpost">
+                                <div class="row grid-space-10">
+                                    <div class="col-md-6">
+                                        <div id="carousel-blog-post" class="carousel slide" data-ride="carousel">
+                                            <!-- Indicators -->
+                                            <ol class="carousel-indicators bottom margin-clear">
+                                                <li data-target="#carousel-blog-post" data-slide-to="0" class="active"></li>
+                                                <li data-target="#carousel-blog-post" data-slide-to="1"></li>
+                                                <li data-target="#carousel-blog-post" data-slide-to="2"></li>
+                                            </ol>
+
+                                            <!-- Wrapper for slides -->
+                                            <div class="carousel-inner" role="listbox">
+                                                <div class="item active">
+                                                    <div class="overlay-container">
+                                                        <img src="http://htmlcoder.me/preview/the_project/v.1.0/template/images/blog-1.jpg" alt="">
+                                                        <a class="overlay-link" href="blog-post.html"><i class="fa fa-link"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="item">
+                                                    <div class="overlay-container">
+                                                        <img src="http://htmlcoder.me/preview/the_project/v.1.0/template/images/blog-3.jpg" alt="">
+                                                        <a class="overlay-link" href="blog-post.html"><i class="fa fa-link"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="item">
+                                                    <div class="overlay-container">
+                                                        <img src="http://htmlcoder.me/preview/the_project/v.1.0/template/images/blog-4.jpg" alt="">
+                                                        <a class="overlay-link" href="blog-post.html"><i class="fa fa-link"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <header>
+                                            <h2><a href="/hooki/read/<%=hooki.sn%>"><%= hooki.title%></a></h2>
+                                            <div class="post-info">
+                                                <span class="post-date"> <i class="icon-calendar"></i> <span class="day">12</span> <span class="month">May 2015</span> </span>
+                                                <span class="submitted"><i class="icon-user-1"></i> by <a href="#">John Doe</a></span>
+                                                <span class="comments"><i class="icon-chat"></i> <a href="#">22 comments</a></span>
+                                            </div>
+                                        </header>
+                                        <div class="blogpost-content">
+                                            <p>
+                                                Mauris dolor sapien, malesuada at interdum ut, hendrerit eget lorem. Nunc interdum mi neque, et  sollicitudin purus fermentum ut. Suspendisse faucibus nibh odio, a vehicula eros pharetra in. Maecenas  ullamcorper commodo rutrum.
+                                            </p>
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum vero iure error soluta, ipsum cum fugiat beatae temporibus, ut atque saepe obcaecati quod quisquam aut! Odio, placeat et facilis quo deleniti est fugiat labore! Quibusdam et magnam aperiam, in fugit accusamus, cumque, aliquam autem dolor quos totam minima. Beatae adipisci omnis dolor.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <footer class="clearfix">
+                                    <div class="tags pull-left">
+                                        <i class="icon-tags"></i>
+                                        <%
+                                        if(hooki.tags) {
+                                        hooki.tags.forEach(function(tag) {
+                                        %>
+                                        <a href='#'><%= tag %></a>,
+                                        <% });} %>
+                                    </div>
+                                    <div class="link pull-right">
+                                        <i class="icon-link"></i><a href="/hooki/read/<%=hooki.sn%>">Read More</a>
+                                    </div>
+                                </footer>
+                            </article>
+                            <!-- blogpost end -->
                             <% }); %>
-                        </ul>
+
+                            <!-- pagination start -->
+                            <nav>
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="#" aria-label="Previous"><i class="fa fa-angle-left"></i></a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#">1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">3</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">4</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">5</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" aria-label="Next"><i class="fa fa-angle-right"></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <!-- pagination end -->
+
+                        </div>
+                        <!-- main end -->
+
                     </div>
                 </div>
-                <!--div class='tag-block'>
-                    <h3>태그 리스트</h3>
-                    <% if(tags) {
-                    tags.forEach(function(tags) {
-                    %>
-                    <span class='tag label label-warning'><%= tags.tag%></span>
-                    <%
-                    });}
-                    %>
-                </div-->
-            </div>
+            </section>
+            <!-- main-container end -->
             <% include ../partial/common/footer %>
         </div>
         <!-- page-wrapper end -->
         <% include ../partial/common/scripts %>
     </body>
 </html>
+
